@@ -1,4 +1,5 @@
        !
+      implicit real (a-h, o-z)
       write(*, *) 'De a, b e c da equacao'
       read(*, *) a, b, c
       delta = (b**2) - (4.0*a*c)
