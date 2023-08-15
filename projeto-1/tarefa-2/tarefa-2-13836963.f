@@ -1,15 +1,7 @@
-       !
-      implicit real (a-h, o-z)
-      write(*, *) 'De a, b e c da equacao'
-      read(*, *) a, b, c
-      delta = (b**2) - (4.0*a*c)
-      if (delta < 0.0) then
-        write(*,*) 'sem raizes'
-        stop
-      end if
-      sdelta = sqrt(delta)
-
-      r1 = (-b-sdelta)/(2*a)
-      r2 = (-b+sdelta)/(2*a)
-      write(*,*) 'As raízes são', r1, 'e', r2
+      write(*, *) 'De x1, y1 e z1 de v1'
+      read(*, *) x1, y1, z1
+      write(*, *) 'De x2, y2 e z2 de v2'
+      read(*, *) x2, y2, z2
+      
+      
       end 
