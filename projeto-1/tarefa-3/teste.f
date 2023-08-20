@@ -1,7 +1,7 @@
 C       Programa7.f
         dimension a(20)
         open(unit=3,file='dado-entrada') ! o arquivo de entrada --> dado-entrad
-C                                   tudo que fizer na unidade 3 será no arquivo C                                   dado-entrada
+C                      tudo que fizer na unidade 3 será no arquivo dado-entrada
         open(unit=12,file='saida-minha')  ! o arquivo de saída --> saida-minha
 C                                   tudo que fixe na unidade 12 será no arquivo
 C                                   saida-minha
