@@ -8,5 +8,6 @@
 !      write(*,*) 'a1 =',a1 
       write(*,*) 'vetor lido --->',(a(k),k=1,n)  
 !      write(*,*) 'aa1 =',aa1 
+      
       close(1)  
       end
