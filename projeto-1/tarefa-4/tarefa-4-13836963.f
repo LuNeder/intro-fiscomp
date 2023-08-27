@@ -10,6 +10,8 @@
           j = n
           do while (j .GE. 1)
             if (mod(i, j) .eq. 0) then
+              continue
+            else
               a(k) = j ! TA ERRADO, É O !OPOSTO DISSO
               k = k+1
               
