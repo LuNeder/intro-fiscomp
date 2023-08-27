@@ -5,11 +5,13 @@
         read(*,*) n
         allocate(a(n))
         i = n
+        k=1
         do while (i .GE. 1)
           j = n
           do while (j .GE. 1)
             if (mod(i, j) .eq. 0) then
-              a(j) = j ! TA ERRADO EH O OPOSTO DISSO
+              a(k) = j ! TA ERRADO, É O !OPOSTO DISSO
+              k = k+1
               
             
             end if
