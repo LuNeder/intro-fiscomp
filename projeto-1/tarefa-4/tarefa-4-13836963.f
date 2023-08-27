@@ -6,21 +6,31 @@
         allocate(a(n))
         i = n
         k=1
+
+        
         do while (i .GE. 1)
           j = n
+          idivs=0
+        !  write(*,*) i
           do while (j .GE. 1)
             if (mod(i, j) .eq. 0) then
-              a(k) = j ! TA ERRADO, É O !OPOSTO DISSO
-              k = k+1
+              
+              idivs = idivs+1
+            !  write(*,*) i, j, idivs
               
             
             end if
             j=j-1
           end do
+          if (idivs .eq. 2) then
+         ! write(*,*) 'aqui'
+            a(k) = i
+            k = k+1
+          end if
           i=i-1
         end do
 
-        write (*,*) a
+        write(*,*) a(1:k-1)
              
 
 
