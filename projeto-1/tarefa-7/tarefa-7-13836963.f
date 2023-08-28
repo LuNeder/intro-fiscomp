@@ -1,19 +1,24 @@
+      integer d
       write(*,*) 'De d'
       read(*,*) d
-      M = 100
-      identro = 0
-      itotal = 0
+      M = 999999
+      dentro = 0
+      total = 0
       do i = 1,M
-        r1 = rand(0)
-        r2 = rand(0)
-        norma = sqrt((r1**2.)+(r2**2.))
-        if (norma .LE. 1) then
-          identro = identro +1
-        end if
-        itotal = itotal +1
-      end do
+      anorma = 0
+        do j = 1,d
+          anorma = anorma + rand(0)**2
+        end do
+               
 
-      volume = ((identro+0.0d0)/(itotal+0.0d0))*(2**d)
+        anorma = sqrt(anorma)
+        if (anorma .LE. 1) then
+          dentro = dentro +1
+        end if
+        total = total +1
+      end do
+      write(*,*) dentro, total, dentro/total
+      volume = (dentro)/(total)*(2.0d0**d)
       write(*,*) 'O Volume é', volume
 
       end
