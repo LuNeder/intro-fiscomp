@@ -1,13 +1,12 @@
-      real, dimension(:), allocatable :: a
+      dimension a(1000000000)
 
       write(*,*) 'De N e M, respectivamente, tal que o programa ira ler'
       write(*,*) 'N numeros reais (em um arquivo) e ordenara '
       write(*,*) 'os M primeiros menores numeros'
       read(*,*) n, m
 
-      allocate(a(n))
       open(unit=1, file='entrada-1-13836963')
-      read(1,*) a
+      read(1,*) (a(j),j=1,n)
 
       do i = 1, m
           do j = i+1, n
