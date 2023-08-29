@@ -17,7 +17,6 @@
         end if
         total = total +1
       end do
-      write(*,*) dentro, total, dentro/total
       volume = (dentro)/(total)*(2.0d0**d)
       write(*,*) 'O Volume é', volume
 
