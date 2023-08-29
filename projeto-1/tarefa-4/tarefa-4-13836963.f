@@ -1,9 +1,9 @@
-        integer, dimension(:), allocatable :: a
+        dimension a(32768)
         
         write(*,*) 'De o numero N para ver se ele'
         write(*,*) 'e os numeros inferiores a ele sao primos'
         read(*,*) n
-        allocate(a(n))
+
         i = n
         k=1
 
