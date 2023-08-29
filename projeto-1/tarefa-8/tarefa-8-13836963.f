@@ -1,3 +1,4 @@
+      program tarefa8
       integer d
       write(*,*) 'De R e d, respectivamente'
       read(*,*) R, d
@@ -13,4 +14,5 @@
       
       close(2)
 
-      end
+      end program
+
