@@ -18,7 +18,6 @@
         pr = (((1-x)**exp)/exp)
         aln = aln + (((1-x)**exp)/exp)
         exp = exp+1
-        write(*,*) dlog(y), aln, pr
       end do
 
 
