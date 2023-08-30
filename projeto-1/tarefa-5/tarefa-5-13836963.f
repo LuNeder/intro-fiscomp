@@ -1,8 +1,8 @@
-      real eprec
+      implicit real*8 (a-z)
       write(*,*) 'De x para calcular ln(x)'
       read(*,*) y
       x = y
-      eprec = 0.00001
+      eprec = 0.0000000000000001
       pr = 1
       exp = 1
       aln = 0
@@ -18,11 +18,12 @@
         pr = (((1-x)**exp)/exp)
         aln = aln + (((1-x)**exp)/exp)
         exp = exp+1
+        write(*,*) dlog(y), aln, pr
       end do
 
 
       aln = a* aln
       write(*,*) 'ln(x) = ', aln
-      write(*,*) 'interno:', log(y)
+      write(*,*) 'interno:', dlog(y)
       
       end
