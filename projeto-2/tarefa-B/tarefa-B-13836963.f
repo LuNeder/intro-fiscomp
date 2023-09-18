@@ -1,5 +1,5 @@
-        dimension a(1000)
-        M = 1000 ! num de andarilhos
+        dimension a(100000)
+        M = 100000 ! num de andarilhos
         N = 1000 ! num de passos
         p = 0.5  ! prob dir
         q = 1-p ! prob esq
@@ -13,7 +13,7 @@
             itot = itot+1
           end do
           ipd = itot - ipe
-          a(j) = ipd - ipe
+          a(j) = ipd - ipe 
         end do
         end
 
