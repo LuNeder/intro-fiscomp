@@ -1,14 +1,13 @@
-       iN = 1572794658
+       iNum = 10000000
        write(*,*) 'De n'
-       read(*,*) iexp
+       read(*,*) exp
 
        soma = 0
-       do i = 1, iN
-         r = rand()**iexp
-         soma = soma + r
+       do i =0,iNum
+         soma = soma + rand()**exp
        end do
 
-       div = soma/iN
+       div = soma/iNum
 
        write(*,*) 'media = ', div
        end
