@@ -1,8 +1,8 @@
         dimension a(-1000:1000)
-        dimension b(0:200)
+        dimension b(0:2)
         a(-1000:1000) = 0
         b(0) = -1
-        b(1:200) = 1
+        b(1:2) = 1
         M = 1000 ! num de andarilhos
         N = 1000 ! num de passos
         ap = 0.5  ! prob dir
