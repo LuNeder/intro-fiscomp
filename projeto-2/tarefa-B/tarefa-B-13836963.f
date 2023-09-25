@@ -6,8 +6,8 @@
         N = 1000 ! num de passos
         p = 0.5  ! prob dir
         q = 1-p ! prob esq
-     !   ipe = 0 !num passos esq
-     !   ipd = 0 ! num passos dir
+!        ipe = 0 !num passos esq
+!        ipd = 0 ! num passos dir
         itot = 0 ! total de passos
         iposx = 0 ! posicao
         open(file='entrada-1', unit=1)
