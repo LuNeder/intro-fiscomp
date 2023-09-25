@@ -1,7 +1,7 @@
         dimension ia(-1001:1001, -1001:1001)
         ia(-1001:1001, -1001:1001) = 0
         M = 100000 ! num de andarilhos
-        N = 1000 ! num de passos
+        N = 10000 ! num de passos
         ap = 0.25e0  ! prob cada - probs iguais
         iposx = 0 ! posicao x
         iposy = 0 ! posicao y
@@ -10,14 +10,14 @@
           iposx = 0
           iposy = 0
           do i=1,N
-            ir = rand()
-            if (ir .lt. 0.25) then !+x
+            ar = rand()
+            if (ar .lt. 0.25) then !+x
               iposx = iposx + 1
             else
-              if (ir .lt. 0.5) then !-x
+              if (ar .lt. 0.5) then !-x
                 iposx = iposx - 1
               else
-                if (ir .lt. 0.75) then !+y
+                if (ar .lt. 0.75) then !+y
                   iposy = iposy + 1
                 else !-y
                   iposy = iposy - 1
