@@ -11,6 +11,7 @@
         sx = 0
         sy = 0
         open(unit=1, file='saida-1')
+
         do j=1,M
           iposx = 0
           iposy = 0
@@ -40,7 +41,7 @@
 
         close(1)
         write(*,*) '<|r|> = ', (sumr/M)
-        write(*,*) 'del² = ', ((sumr2 -((sx**2) + (sy**2)))/M)
+        write(*,*) '∆² = ', ((sumr2 -((sx**2) + (sy**2)))/M)
         end
         
         
