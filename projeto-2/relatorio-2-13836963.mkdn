@@ -1,0 +1,273 @@
+# Projeto 2
+
+
+## Tarefa A
+O código abaixo calcula equações do segundo grau. Ele recebe como entrada a, b e c da equação, calcula o delta e em seguida verifica se ele é menor que zero e caso positivo encerra o programa dizendo que não há raízes. Caso o delta seja maior ou igual a zero, o programa continua, calcula as raízes e então as mostra no stdout.
+````fortran77
+      write(*, *) 'De a, b e c da equacao'
+      read(*, *) a, b, c
+      delta = (b**2) - (4.0*a*c)
+      if (delta < 0.0) then
+        write(*,*) 'sem raizes'
+        stop
+      end if
+      sdelta = sqrt(delta)
+
+      r1 = (-b-sdelta)/(2*a)
+      r2 = (-b+sdelta)/(2*a)Update Relatorio-1-13836963.md
+      write(*,*) 'As raízes são', r1, 'e', r2
+      end 
+````
+
+Aqui estão seis exemplos de saída:
+![tarefa1](https://github.com/LuNeder/intro-fiscomp/assets/19750714/49eeb1f5-cda7-4df1-98bf-1a3850ec4802)
+
+
+## Tarefa 2
+O código abaixo calcula a área de um triângulo formado por dois vetores. Primeiro ele lê do stdin as coordenadas deles, e então calcula a área por meio da metade do produto vetorial e a imprime.
+````fortran77
+      write(*, *) 'De x1, y1 e z1 de v1'
+      read(*, *) x1, y1, z1
+      write(*, *) 'De x2, y2 e z2 de v2'
+      read(*, *) x2, y2, z2
+      a1= y1*z2 - z1*y2
+      a2= z1*x2 - x1*z2
+      a3= x1*y2 - y1*x2
+      area = (sqrt((a1**2)+(a2**2)+(a3**2)))/2
+      write(*,*) 'A área do triângulo formado por v1 e v2 é', area
+      end
+````
+Veja abaixo um exeplo de saída:
+![tarefa2](https://github.com/LuNeder/intro-fiscomp/assets/19750714/93120508-f42c-4fbd-b2e9-798a233fbc2f)
+
+## Tarefa 3
+O programa abaixo lê N números em um arquivo e ordena os M primeiros menores números em um novo arquivo. Primeiro ele pede a entrada do N e do M,  e então faz um loop em m para ordenar os valores. Por fim, o arquivo de saída é aberto e escrito.
+````fortran77
+      dimension a(1000000000)
+
+      write(*,*) 'De N e M, respectivamente, tal que o programa ira ler'
+      write(*,*) 'N numeros reais (em um arquivo) e ordenara '
+      write(*,*) 'os M primeiros menores numeros'
+      read(*,*) n, m
+
+      open(unit=1, file='entrada-1-13836963')
+      read(1,*) (a(j),j=1,n)
+
+      do i = 1, m
+          do j = i+1, n
+              if (a(j) .LT. a(i)) then
+                  aux = a(i)
+                  a(i) = a(j)
+                  a(j) = aux
+              end if
+          end do
+      end do
+
+      open(unit=2, file='saida-1-13836963')
+      do i = 1, m
+          write(2,*) a(i)
+      end do
+
+      write(2,*) m
+
+      close(1)
+      close(2)
+      end
+````
+Veja um exemplo de entrada e saída:
+![tarefa3](https://github.com/LuNeder/intro-fiscomp/assets/19750714/2f32e406-02b8-49b0-99a3-fefd36121ae9)
+
+
+## Tarefa 4
+Este programa recebe um número como entrada e verifica se ele e os números inferiores a ele são primos. Primeiro recebe como entrada um número, e em seguida verifica por quantos números ele é divisível. Caso o númereo for divisível por apenas 2 números (1 e ele mesmo), ele é adicionado à lista de primos. Em seguida, isso é repetido para cada número menor que o inicial. Por fim, o arquivo é escrito.
+````fortran77
+        dimension a(32768)
+        
+        write(*,*) 'De o numero N para ver se ele'
+        write(*,*) 'e os numeros inferiores a ele sao primos'
+        read(*,*) n
+
+        i = n
+        k=1
+        
+        do while (i .GE. 1)
+          j = n
+          idivs=0
+          do while (j .GE. 1)
+            if (mod(i, j) .eq. 0) then
+              idivs = idivs+1
+            end if
+            j=j-1
+          end do
+          if (idivs .eq. 2) then
+            a(k) = i
+            k = k+1
+          end if
+          i=i-1
+        end do
+      open(unit=2, file='saida-1-13836963')
+      write(2,*) a(1:k-1)
+             
+      end
+````
+Abaixo um exemplo de entrada e saída:
+![tarefa4](https://github.com/LuNeder/intro-fiscomp/assets/19750714/89153da3-5452-44dc-a4dd-70ef07d113e0)
+
+
+
+## Tarefa 5
+O código abaixo calcula o logaritmo neperiano utilizando uma série e compara o resultado com a função loh(x) inclusa no fortran. Primeiro, o programa pede o x para calcular ln(x), em seguida verifica se x é maior ou igual a 1. Caso positifo, o x é substituido pelo seu inverso para que a série possa funcionar e uma variável a é definida para indicar que o resultado será o oposto (ln(x) = -ln(1/x)). Por fim, um loop calcula o ln com a série dada até que chegue na precisão de eprec (10^-5, como solicitado). Então o programa imprime o resultado e o ln calculado pela função interna do fortran, para fins de comparação.
+````fortran77
+      real eprec
+      write(*,*) 'De x para calcular ln(x)'
+      read(*,*) y
+      x = y
+      eprec = 0.00001
+      pr = 1
+      exp = 1
+      aln = 0
+      a = -1
+
+      if (x .GE. 1) then
+        x = 1/x
+        a = 1
+      end if
+
+
+      do while (pr .GE. eprec) 
+        pr = (((1-x)**exp)/exp)
+        aln = aln + (((1-x)**exp)/exp)
+        exp = exp+1
+      end do
+
+
+      aln = a* aln
+      write(*,*) 'ln(x) = ', aln
+      write(*,*) 'interno:', log(y)
+      
+      end
+````
+Veja abaixo alguns exemplos:
+![Tarefa5](https://github.com/LuNeder/intro-fiscomp/assets/19750714/21575c79-01cd-417e-a6eb-1451992e0fe7)
+
+Após a mudança para dupla precisão, ficou assim (a eprec foi atualizada para se aproximar o máximo possível da função interna dlog(x), como pedido):
+````fortran77
+      implicit real*8 (a-z)
+      write(*,*) 'De x para calcular ln(x)'
+      read(*,*) y
+      x = y
+      eprec = 0.0000000000000001
+      pr = 1
+      exp = 1
+      aln = 0
+      a = -1
+
+      if (x .GE. 1) then
+        x = 1/x
+        a = 1
+      end if
+
+      do while (pr .GE. eprec) 
+        pr = (((1-x)**exp)/exp)
+        aln = aln + (((1-x)**exp)/exp)
+        exp = exp+1
+      end do
+
+      aln = a* aln
+      write(*,*) 'ln(x) = ', aln
+      write(*,*) 'interno:', dlog(y)
+      
+      end
+````
+Veja alguns exemplos da nova versão:
+![tarefa5-2](https://github.com/LuNeder/intro-fiscomp/assets/19750714/63695a9f-6add-4448-891a-1567346a43f7)
+
+
+## Tarefa 6
+Este código recebe um número N como entrada e calcula as raízes da expressão (z-2)^N=3. Calcula alpha e rho, e então a e b tal que z = a+bi. Por fim, escreve na tela os resultados e os formata.
+````fortran77
+      write(*,*) 'De N'
+      read(*,*) iN
+      k=0
+      pi = 4.*atan(1.0)
+
+      rho = 3. ** (1./iN)
+
+      do k = 1,iN
+        alpha = (2.*k*pi)/iN
+        a = (rho * cos(alpha)) + 2.
+        b = rho * sin(alpha)
+        write(*,1) 'z', ' = ', a, ', ', b, 'i'
+1       format(a1, a3, f10.6, a2, f10.6, a1) 
+      end do
+
+      end
+````
+Abaixo testes para N de 1 a 7:
+![tarefa6](https://github.com/LuNeder/intro-fiscomp/assets/19750714/4666c8e9-e403-4d0b-9a7d-619c3661441a)
+
+## Tarefa 7
+Esse programa calcula o volume de uma esfera de raio 1 e d dimensões. Primeiro ele recebe o número d de entrada. Então o programa gera 2 números aleatórios e faz a norma deles para verificar se o ponto está dentro da esfera. Isso é repetido M vezes. A razão entre a quantidade de pontos dentro da esfera e do total de pontos gerados é o volume em um quadrante. Por fim, o resultado é multiplicado pelo número de quadrantes da dimensão para obter o volume. Quanto maior o número M, maior a precisão.
+
+````fortran77
+      integer d
+      write(*,*) 'De d'
+      read(*,*) d
+      M = 999999
+      dentro = 0
+      total = 0
+      do i = 1,M
+      anorma = 0
+        do j = 1,d
+          anorma = anorma + rand(0)**2
+        end do
+               
+        anorma = sqrt(anorma)
+        if (anorma .LE. 1) then
+          dentro = dentro +1
+        end if
+        total = total +1
+      end do
+      volume = (dentro)/(total)*(2.0d0**d)
+      write(*,*) 'O Volume é', volume
+
+      end
+````
+
+Abaixo, exemplos para 2, 3 e 4 dimensões:
+![tarefa7](https://github.com/LuNeder/intro-fiscomp/assets/19750714/7b9ab384-8d8e-4d45-aa1b-ad67fdae7a6e)
+
+## Tarefa 8
+Esse programa calcula de outra forma o volume de uma esfera de raio R e dimensão d. Além disso, salva em um arquivo o volume da dimensão d e de dimensões inferiores a d por meio de um loop.
+````fortran77
+      integer d
+      write(*,*) 'De R e d, respectivamente'
+      read(*,*) R, d
+      pi = 4.*atan(1.0)
+      open(unit=2, file='dimensoes-esferas')
+
+      do idim = 2,d
+        volume = 0
+        exp = real(idim)
+        volume = ((pi**(exp/2))/gamma((exp/2)+1.0))*(R**exp)
+        write(2,*) idim, volume
+      end do
+      
+      close(2)
+
+      end
+````
+Com o resultado do programa, podemos fazer um gráfico:
+![grafico-1-13836963](https://github.com/LuNeder/intro-fiscomp/assets/19750714/24238b5b-d1cd-495b-afbd-530d9cc038e1)
+
+## Perguntas
+A) 
+![pergunta A](https://github.com/LuNeder/intro-fiscomp/assets/19750714/f48b13f5-9bd8-41ac-8d2d-9b8da1e56795)
+
+ 
+
+B) O número de avogadro em d dimensões será 
+![Pergunta B](https://github.com/LuNeder/intro-fiscomp/assets/19750714/0b30d400-f5f9-4086-b739-5b16fb3e92c8)
+. É uma aproximação, mas não muito boa: substituindo d para 3 obtemos 10²¹, sendo que o real é 10²³
+
+
