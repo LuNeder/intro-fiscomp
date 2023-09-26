@@ -8,6 +8,8 @@
         avetr = 0 ! magnetude do vetor posicao r
         sumr = 0
         sumr2 = 0
+        sx = 0
+        sy = 0
         open(unit=1, file='saida-1')
         do j=1,M
           iposx = 0
@@ -29,11 +31,11 @@
             end if 
           end do
           write (1, *) iposx, iposy
-          r2 = iposx**2 + iposy**2
+          ar2 = iposx**2 + iposy**2
           sx = sx + iposx
           sy = sy + iposy
-          sumr2 = sumr2+s
-          sumr = sumr + sqrt(r2)
+          sumr2 = sumr2+ar2
+          sumr = sumr + sqrt(ar2)
         end do
 
         close(1)
