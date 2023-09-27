@@ -2,25 +2,25 @@
 
 
 ## Tarefa A
-O código abaixo calcula equações do segundo grau. Ele recebe como entrada a, b e c da equação, calcula o delta e em seguida verifica se ele é menor que zero e caso positivo encerra o programa dizendo que não há raízes. Caso o delta seja maior ou igual a zero, o programa continua, calcula as raízes e então as mostra no stdout.
+O código abaixo calcula a média <x^n> para uma sequência aleartória gerada.
 ````fortran77
-      write(*, *) 'De a, b e c da equacao'
-      read(*, *) a, b, c
-      delta = (b**2) - (4.0*a*c)
-      if (delta < 0.0) then
-        write(*,*) 'sem raizes'
-        stop
-      end if
-      sdelta = sqrt(delta)
+       iNum = 10000000
+       write(*,*) 'De n'
+       read(*,*) exp
 
-      r1 = (-b-sdelta)/(2*a)
-      r2 = (-b+sdelta)/(2*a)Update Relatorio-1-13836963.md
-      write(*,*) 'As raízes são', r1, 'e', r2
-      end 
+       soma = 0
+       do i =0,iNum
+         soma = soma + rand()**exp
+       end do
+
+       div = soma/iNum
+
+       write(*,*) 'media = ', div
+       end
 ````
 
 Aqui estão seis exemplos de saída:
-![tarefa1](https://github.com/LuNeder/intro-fiscomp/assets/19750714/49eeb1f5-cda7-4df1-98bf-1a3850ec4802)
+
 
 
 ## Tarefa 2
