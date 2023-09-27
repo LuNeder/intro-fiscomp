@@ -1,5 +1,5 @@
 # Projeto 2
-
+<!-- Compilar com: pandoc ./relatorio-2-13836963.mkdn --pdf-engine=lualatex -f markdown-implicit_figures -o ./relatorio-2-13836963.pdf -->
 
 ## Tarefa A
 O código abaixo calcula a média <$x^n$> para uma sequência aleartória gerada.
@@ -108,77 +108,138 @@ $\frac{1}{5}$:
 ![h15](fotos/histo15.png)
 
 
-## Tarefa 4
-Este programa recebe um número como entrada e verifica se ele e os números inferiores a ele são primos. Primeiro recebe como entrada um número, e em seguida verifica por quantos números ele é divisível. Caso o númereo for divisível por apenas 2 números (1 e ele mesmo), ele é adicionado à lista de primos. Em seguida, isso é repetido para cada número menor que o inicial. Por fim, o arquivo é escrito.
+## Tarefa C
+Este programa faz um mapa do problema dos andarilhos bêbados em 2D e, em seguida, calcula a média do módulo do vetor posição (<|$\vec{r}$|>) e o $\Delta^2$ de $\vec{r}$. O arquivo para o gráfico é salvo e as médias são impressas no stdout.
 
 ````fortran
-        dimension a(32768)
-        
-        write(*,*) 'De o numero N para ver se ele'
-        write(*,*) 'e os numeros inferiores a ele sao primos'
-        read(*,*) n
+        dimension ia(-1001:1001, -1001:1001)
+        ia(-1001:1001, -1001:1001) = 0
+        M = 100000 ! num de andarilhos
+        N = 10000 ! num de passos
+        ! ap = 0.25e0  ! prob cada - probs iguais
+        iposx = 0 ! posicao x
+        iposy = 0 ! posicao y
+        avetr = 0 ! magnetude do vetor posicao r
+        sumr = 0
+        sumr2 = 0
+        sx = 0
+        sy = 0
+        open(unit=1, file='saida-1')
 
-        i = n
-        k=1
-        
-        do while (i .GE. 1)
-          j = n
-          idivs=0
-          do while (j .GE. 1)
-            if (mod(i, j) .eq. 0) then
-              idivs = idivs+1
-            end if
-            j=j-1
+        do j=1,M
+          iposx = 0
+          iposy = 0
+          do i=1,N
+            ar = rand()
+            if (ar .lt. 0.25) then !+x
+              iposx = iposx + 1
+            else
+              if (ar .lt. 0.5) then !-x
+                iposx = iposx - 1
+              else
+                if (ar .lt. 0.75) then !+y
+                  iposy = iposy + 1
+                else !-y
+                  iposy = iposy - 1
+                end if
+              end if
+            end if 
           end do
-          if (idivs .eq. 2) then
-            a(k) = i
-            k = k+1
-          end if
-          i=i-1
+          write (1, *) iposx, iposy
+          ar2 = iposx**2 + iposy**2
+          sx = sx + iposx
+          sy = sy + iposy
+          sumr2 = sumr2+ar2
+          sumr = sumr + sqrt(ar2)
         end do
-      open(unit=2, file='saida-1-13836963')
-      write(2,*) a(1:k-1)
-             
-      end
+
+        close(1)
+        write(*,*) '<|r|> = ', (sumr/M)
+        write(*,*) '∆² = ', ((sumr2 -((sx**2) + (sy**2)))/M)
+        end
 ````
 
-Abaixo um exemplo de entrada e saída:
+Abaixo um exemplo da média e $\Delta^2$ para 10000 passos, seguido pelos mapas para N =10, 100, 1000, 10000, $10^5$ e $10^6$, respectivamente:
 
-![tarefa4]()
+![c](fotos/c.png)
+
+![10](fotos/c10.png)
+
+![100](fotos/c100.png)
+
+![1000](fotos/c1000.png)
+
+![10000](fotos/c10000.png)
+
+![e5](fotos/c1e5.png)
 
 
-
-## Tarefa 5
-O código abaixo calcula o logaritmo neperiano utilizando uma série e compara o resultado com a função loh(x) inclusa no fortran. Primeiro, o programa pede o x para calcular ln(x), em seguida verifica se x é maior ou igual a 1. Caso positifo, o x é substituido pelo seu inverso para que a série possa funcionar e uma variável a é definida para indicar que o resultado será o oposto (ln(x) = -ln(1/x)). Por fim, um loop calcula o ln com a série dada até que chegue na precisão de eprec (10^-5, como solicitado). Então o programa imprime o resultado e o ln calculado pela função interna do fortran, para fins de comparação.
+## Tarefa D
+Agora
 
 ````fortran
-      real eprec
-      write(*,*) 'De x para calcular ln(x)'
-      read(*,*) y
-      x = y
-      eprec = 0.00001
-      pr = 1
-      exp = 1
-      aln = 0
-      a = -1
+      dimension mapa(-1000:1000,-1000:1000)
 
-      if (x .GE. 1) then
-        x = 1/x
-        a = 1
-      end if
+      open(unit=7, file='grafico-13836963')
 
+      ipdo = 1
+      N = 1000 !andarilhos 
+      M = 1000 !passos
+      do while(ipdo.le.M)
+        mapa(-1000:1000,-1000:1000) = 0
 
-      do while (pr .GE. eprec) 
-        pr = (((1-x)**exp)/exp)
-        aln = aln + (((1-x)**exp)/exp)
-        exp = exp+1
+       ! tarefa C
+        do j=1,N
+          iposx = 0
+          iposy = 0
+          do i=1,ipdo
+            ar = rand()
+            if (ar .lt. 0.25) then !+x
+              iposx = iposx + 1
+            else
+              if (ar .lt. 0.5) then !-x
+                iposx = iposx - 1
+              else
+                if (ar .lt. 0.75) then !+y
+                  iposy = iposy + 1
+                else !-y
+                  iposy = iposy - 1
+                end if
+              end if
+            end if 
+          end do
+          mapa(iposx,iposy) = mapa(iposx,iposy) + 1
+        end do 
+        ! fim tarefa C
+
+        an = n
+        iret = 10
+        e = 0
+
+        i = 0 - M
+        do while(i.lt.M)
+          j = 0 - M
+          do while(j.lt.M)
+            apt = 0
+            do k=i,i+iret
+              do l=j,j+iret
+                apt = apt + mapa(k,l)
+              end do
+            end do
+            if(apt.gt.0) then
+                aprob = apt/an
+                e = e - aprob*log(aprob)   
+            end if
+            j = j + iret
+          end do
+          i = i + iret
+        end do
+
+        write(7,*) ipdo, e
+        ipdo = ipdo + 1
       end do
 
-
-      aln = a* aln
-      write(*,*) 'ln(x) = ', aln
-      write(*,*) 'interno:', log(y)
-      
+      close(7)
       end
 ````
 

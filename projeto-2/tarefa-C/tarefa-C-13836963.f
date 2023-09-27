@@ -1,7 +1,7 @@
         dimension ia(-1001:1001, -1001:1001)
         ia(-1001:1001, -1001:1001) = 0
         M = 100000 ! num de andarilhos
-        N = 10000 ! num de passos
+        N = 1000000! num de passos
         ! ap = 0.25e0  ! prob cada - probs iguais
         iposx = 0 ! posicao x
         iposy = 0 ! posicao y
