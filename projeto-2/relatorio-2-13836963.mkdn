@@ -3,6 +3,7 @@
 
 ## Tarefa A
 O código abaixo calcula a média <$x^n$> para uma sequência aleartória gerada.
+
 ````fortran
        iNum = 10000000
        write(*,*) 'De n'
@@ -24,64 +25,92 @@ Aqui estão seis exemplos de saída:
 ![tarefaA](fotos/Captura de tela_2023-09-26_21-17-56.png)
 
 
-## Tarefa 2
-O código abaixo calcula a área de um triângulo formado por dois vetores. Primeiro ele lê do stdin as coordenadas deles, e então calcula a área por meio da metade do produto vetorial e a imprime.
+## Tarefa B1
+O código abaixo calcula um histograma do andarilho bebado após N = 1000 passos
+
 ````fortran
-      write(*, *) 'De x1, y1 e z1 de v1'
-      read(*, *) x1, y1, z1
-      write(*, *) 'De x2, y2 e z2 de v2'
-      read(*, *) x2, y2, z2
-      a1= y1*z2 - z1*y2
-      a2= z1*x2 - x1*z2
-      a3= x1*y2 - y1*x2
-      area = (sqrt((a1**2)+(a2**2)+(a3**2)))/2
-      write(*,*) 'A área do triângulo formado por v1 e v2 é', area
-      end
-````
-Veja abaixo um exeplo de saída:
-
-![tarefa2](https://github.com/LuNeder/intro-fiscomp/assets/19750714/93120508-f42c-4fbd-b2e9-798a233fbc2f)
-
-## Tarefa 3
-O programa abaixo lê N números em um arquivo e ordena os M primeiros menores números em um novo arquivo. Primeiro ele pede a entrada do N e do M,  e então faz um loop em m para ordenar os valores. Por fim, o arquivo de saída é aberto e escrito.
-````fortran
-      dimension a(1000000000)
-
-      write(*,*) 'De N e M, respectivamente, tal que o programa ira ler'
-      write(*,*) 'N numeros reais (em um arquivo) e ordenara '
-      write(*,*) 'os M primeiros menores numeros'
-      read(*,*) n, m
-
-      open(unit=1, file='entrada-1-13836963')
-      read(1,*) (a(j),j=1,n)
-
-      do i = 1, m
-          do j = i+1, n
-              if (a(j) .LT. a(i)) then
-                  aux = a(i)
-                  a(i) = a(j)
-                  a(j) = aux
-              end if
+        dimension ia(-1001:1001)
+        dimension ib(0:1)
+        ia(-1001:1001) = 0
+        ib(0) = 1
+        ib(1) = -1
+        M = 100000 ! num de andarilhos
+        N = 1000 ! num de passos
+        ap = 0.5e0  ! prob dir
+        itot = 0 ! total de passos
+        iposx = 0 ! posicao
+        open(unit=1, file='saida-1')
+        do j=1,M
+          iposx = 0
+          do i=1,N
+            ir = rand()/ap ! 0 = dir 1 = esq.
+C            write(*,*) ir
+            iposx = iposx + ib(ir)           
           end do
-      end do
-
-      open(unit=2, file='saida-1-13836963')
-      do i = 1, m
-          write(2,*) a(i)
-      end do
-
-      write(2,*) m
-
-      close(1)
-      close(2)
-      end
+C          write(*,*) 'iposx-final = ', iposx
+          ia(iposx) = ia(iposx) + 1
+        end do
+        do k = 0-N, N
+          write(1,*) k, ia(k)
+        end do
+        close(1)
+        end
 ````
-Veja um exemplo de entrada e saída:
-![tarefa3](https://github.com/LuNeder/intro-fiscomp/assets/19750714/2f32e406-02b8-49b0-99a3-fefd36121ae9)
+
+O histograma ficou assim:
+
+![Histograma](fotos/histoB.png)
+
+É perceptível que o gráfico fica centrado em torno do zero, como esperado para o caso de probabilidades iguais para esquerda e direita.
+
+## Tarefa B2
+Agora realizamos novamente a tarefa B1, mas alterando a probabilidade p para $\frac{1}{3}$, $\frac{1}{4}$ e $\frac{1}{5}$
+
+````fortran
+        dimension ia(-1001:1001)
+        dimension ib(0:100)
+        ia(-1001:1001) = 0
+        ib(0) = 1
+        ib(1:100) = -1
+        M = 100000 ! num de andarilhos
+        N = 1000 ! num de passos
+        ap = 0.25e0  ! prob dir - Alternar entre 1/3, 1/4 e 1/5
+        itot = 0 ! total de passos
+        iposx = 0 ! posicao
+        open(unit=1, file='saida-1')
+        do j=1,M
+          iposx = 0
+          do i=1,N
+            ir = rand()/ap ! 0 = dir 1 = esq.
+            iposx = iposx + ib(ir)           
+          end do
+          ia(iposx) = ia(iposx) + 1
+        end do
+        do k = 0-N, N
+          write(1,*) k, ia(k)
+        end do
+        close(1)
+        end
+````
+
+Assim ficam os novos histogramas:
+
+$\frac{1}{3}$:
+
+![Histograma 1/3](fotos/histo13.png)
+
+$\frac{1}{4}$:
+
+![h14](fotos/histo14.png)
+
+$\frac{1}{5}$:
+
+![h15](fotos/histo15.png)
 
 
 ## Tarefa 4
 Este programa recebe um número como entrada e verifica se ele e os números inferiores a ele são primos. Primeiro recebe como entrada um número, e em seguida verifica por quantos números ele é divisível. Caso o númereo for divisível por apenas 2 números (1 e ele mesmo), ele é adicionado à lista de primos. Em seguida, isso é repetido para cada número menor que o inicial. Por fim, o arquivo é escrito.
+
 ````fortran
         dimension a(32768)
         
@@ -112,13 +141,16 @@ Este programa recebe um número como entrada e verifica se ele e os números inf
              
       end
 ````
+
 Abaixo um exemplo de entrada e saída:
-![tarefa4](https://github.com/LuNeder/intro-fiscomp/assets/19750714/89153da3-5452-44dc-a4dd-70ef07d113e0)
+
+![tarefa4]()
 
 
 
 ## Tarefa 5
 O código abaixo calcula o logaritmo neperiano utilizando uma série e compara o resultado com a função loh(x) inclusa no fortran. Primeiro, o programa pede o x para calcular ln(x), em seguida verifica se x é maior ou igual a 1. Caso positifo, o x é substituido pelo seu inverso para que a série possa funcionar e uma variável a é definida para indicar que o resultado será o oposto (ln(x) = -ln(1/x)). Por fim, um loop calcula o ln com a série dada até que chegue na precisão de eprec (10^-5, como solicitado). Então o programa imprime o resultado e o ln calculado pela função interna do fortran, para fins de comparação.
+
 ````fortran
       real eprec
       write(*,*) 'De x para calcular ln(x)'
@@ -149,10 +181,13 @@ O código abaixo calcula o logaritmo neperiano utilizando uma série e compara o
       
       end
 ````
+
 Veja abaixo alguns exemplos:
-![Tarefa5](https://github.com/LuNeder/intro-fiscomp/assets/19750714/21575c79-01cd-417e-a6eb-1451992e0fe7)
+
+![Tarefa5]()
 
 Após a mudança para dupla precisão, ficou assim (a eprec foi atualizada para se aproximar o máximo possível da função interna dlog(x), como pedido):
+
 ````fortran
       implicit real*8 (a-z)
       write(*,*) 'De x para calcular ln(x)'
@@ -181,12 +216,15 @@ Após a mudança para dupla precisão, ficou assim (a eprec foi atualizada para 
       
       end
 ````
+
 Veja alguns exemplos da nova versão:
-![tarefa5-2](https://github.com/LuNeder/intro-fiscomp/assets/19750714/63695a9f-6add-4448-891a-1567346a43f7)
+
+![tarefa5-2]()
 
 
 ## Tarefa 6
 Este código recebe um número N como entrada e calcula as raízes da expressão (z-2)^N=3. Calcula alpha e rho, e então a e b tal que z = a+bi. Por fim, escreve na tela os resultados e os formata.
+
 ````fortran
       write(*,*) 'De N'
       read(*,*) iN
@@ -205,8 +243,10 @@ Este código recebe um número N como entrada e calcula as raízes da expressão
 
       end
 ````
+
 Abaixo testes para N de 1 a 7:
-![tarefa6](https://github.com/LuNeder/intro-fiscomp/assets/19750714/4666c8e9-e403-4d0b-9a7d-619c3661441a)
+
+![tarefa6]()
 
 ## Tarefa 7
 Esse programa calcula o volume de uma esfera de raio 1 e d dimensões. Primeiro ele recebe o número d de entrada. Então o programa gera 2 números aleatórios e faz a norma deles para verificar se o ponto está dentro da esfera. Isso é repetido M vezes. A razão entre a quantidade de pontos dentro da esfera e do total de pontos gerados é o volume em um quadrante. Por fim, o resultado é multiplicado pelo número de quadrantes da dimensão para obter o volume. Quanto maior o número M, maior a precisão.
@@ -237,10 +277,12 @@ Esse programa calcula o volume de uma esfera de raio 1 e d dimensões. Primeiro 
 ````
 
 Abaixo, exemplos para 2, 3 e 4 dimensões:
-![tarefa7](https://github.com/LuNeder/intro-fiscomp/assets/19750714/7b9ab384-8d8e-4d45-aa1b-ad67fdae7a6e)
+
+![tarefa7]()
 
 ## Tarefa 8
 Esse programa calcula de outra forma o volume de uma esfera de raio R e dimensão d. Além disso, salva em um arquivo o volume da dimensão d e de dimensões inferiores a d por meio de um loop.
+
 ````fortran
       integer d
       write(*,*) 'De R e d, respectivamente'
@@ -259,17 +301,8 @@ Esse programa calcula de outra forma o volume de uma esfera de raio R e dimensã
 
       end
 ````
+
 Com o resultado do programa, podemos fazer um gráfico:
-![grafico-1-13836963](https://github.com/LuNeder/intro-fiscomp/assets/19750714/24238b5b-d1cd-495b-afbd-530d9cc038e1)
 
-## Perguntas
-A) 
-![pergunta A](https://github.com/LuNeder/intro-fiscomp/assets/19750714/f48b13f5-9bd8-41ac-8d2d-9b8da1e56795)
-
- 
-
-B) O número de avogadro em d dimensões será 
-![Pergunta B](https://github.com/LuNeder/intro-fiscomp/assets/19750714/0b30d400-f5f9-4086-b739-5b16fb3e92c8)
-. É uma aproximação, mas não muito boa: substituindo d para 3 obtemos 10²¹, sendo que o real é 10²³
-
+![grafico-1-13836963]()
 
