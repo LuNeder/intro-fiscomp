@@ -22,7 +22,7 @@ O código abaixo calcula a média <$x^n$> para uma sequência aleartória gerada
 
 Aqui estão seis exemplos de saída:
 
-![tarefaA](fotos/Captura de tela_2023-09-26_21-17-56.png)
+![tarefaA](fotos/Captura-de-tela_2023-09-26_21-17-56.png)
 
 
 ## Tarefa B1
