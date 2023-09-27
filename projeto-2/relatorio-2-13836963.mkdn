@@ -173,6 +173,9 @@ Abaixo um exemplo da média e $\Delta^2$ para 10000 passos, seguido pelos mapas 
 
 ![e5](fotos/c1e5.png)
 
+![e6](fotos/c1e6.png)
+
+É perceptível que quanto maior o número de passos mais longe da origem os andarilhos vão, no entanto
 
 ## Tarefa D
 Agora
