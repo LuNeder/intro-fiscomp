@@ -175,10 +175,11 @@ Abaixo um exemplo da média e $\Delta^2$ para 10000 passos, seguido pelos mapas 
 
 ![e6](fotos/c1e6.png)
 
-É perceptível que quanto maior o número de passos mais longe da origem os andarilhos vão, no entanto
+É perceptível que quanto maior o número de passos mais longe da origem os andarilhos vão, no entanto a visão geral se mantém centrada nela.
 
 ## Tarefa D
-Agora
+Agora calculamos a entropia do problema C, definindo o tamanho de um reticulado de 10 passos. O código é construído ao redor do da tarefa C, tendo em vista calculara entropia da mesma situação vista em tal tarefa.
+O código, então, faz o gráfico da entropia.
 
 ````fortran
       dimension mapa(-1000:1000,-1000:1000)
@@ -246,127 +247,8 @@ Agora
       end
 ````
 
-Veja abaixo alguns exemplos:
+Este é o gráfico da entropia:
 
-![Tarefa5]()
+![entropia](fotos/entropia.png)
 
-Após a mudança para dupla precisão, ficou assim (a eprec foi atualizada para se aproximar o máximo possível da função interna dlog(x), como pedido):
-
-````fortran
-      implicit real*8 (a-z)
-      write(*,*) 'De x para calcular ln(x)'
-      read(*,*) y
-      x = y
-      eprec = 0.0000000000000001
-      pr = 1
-      exp = 1
-      aln = 0
-      a = -1
-
-      if (x .GE. 1) then
-        x = 1/x
-        a = 1
-      end if
-
-      do while (pr .GE. eprec) 
-        pr = (((1-x)**exp)/exp)
-        aln = aln + (((1-x)**exp)/exp)
-        exp = exp+1
-      end do
-
-      aln = a* aln
-      write(*,*) 'ln(x) = ', aln
-      write(*,*) 'interno:', dlog(y)
-      
-      end
-````
-
-Veja alguns exemplos da nova versão:
-
-![tarefa5-2]()
-
-
-## Tarefa 6
-Este código recebe um número N como entrada e calcula as raízes da expressão (z-2)^N=3. Calcula alpha e rho, e então a e b tal que z = a+bi. Por fim, escreve na tela os resultados e os formata.
-
-````fortran
-      write(*,*) 'De N'
-      read(*,*) iN
-      k=0
-      pi = 4.*atan(1.0)
-
-      rho = 3. ** (1./iN)
-
-      do k = 1,iN
-        alpha = (2.*k*pi)/iN
-        a = (rho * cos(alpha)) + 2.
-        b = rho * sin(alpha)
-        write(*,1) 'z', ' = ', a, ', ', b, 'i'
-1       format(a1, a3, f10.6, a2, f10.6, a1) 
-      end do
-
-      end
-````
-
-Abaixo testes para N de 1 a 7:
-
-![tarefa6]()
-
-## Tarefa 7
-Esse programa calcula o volume de uma esfera de raio 1 e d dimensões. Primeiro ele recebe o número d de entrada. Então o programa gera 2 números aleatórios e faz a norma deles para verificar se o ponto está dentro da esfera. Isso é repetido M vezes. A razão entre a quantidade de pontos dentro da esfera e do total de pontos gerados é o volume em um quadrante. Por fim, o resultado é multiplicado pelo número de quadrantes da dimensão para obter o volume. Quanto maior o número M, maior a precisão.
-
-````fortran
-      integer d
-      write(*,*) 'De d'
-      read(*,*) d
-      M = 999999
-      dentro = 0
-      total = 0
-      do i = 1,M
-      anorma = 0
-        do j = 1,d
-          anorma = anorma + rand(0)**2
-        end do
-               
-        anorma = sqrt(anorma)
-        if (anorma .LE. 1) then
-          dentro = dentro +1
-        end if
-        total = total +1
-      end do
-      volume = (dentro)/(total)*(2.0d0**d)
-      write(*,*) 'O Volume é', volume
-
-      end
-````
-
-Abaixo, exemplos para 2, 3 e 4 dimensões:
-
-![tarefa7]()
-
-## Tarefa 8
-Esse programa calcula de outra forma o volume de uma esfera de raio R e dimensão d. Além disso, salva em um arquivo o volume da dimensão d e de dimensões inferiores a d por meio de um loop.
-
-````fortran
-      integer d
-      write(*,*) 'De R e d, respectivamente'
-      read(*,*) R, d
-      pi = 4.*atan(1.0)
-      open(unit=2, file='dimensoes-esferas')
-
-      do idim = 2,d
-        volume = 0
-        exp = real(idim)
-        volume = ((pi**(exp/2))/gamma((exp/2)+1.0))*(R**exp)
-        write(2,*) idim, volume
-      end do
-      
-      close(2)
-
-      end
-````
-
-Com o resultado do programa, podemos fazer um gráfico:
-
-![grafico-1-13836963]()
-
+Percebe-se que a entropia aumenta com o tempo, como esperado, e tem uma forma logarítmica.

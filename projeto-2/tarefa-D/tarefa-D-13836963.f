@@ -2,7 +2,7 @@
       
 
       
-      open(unit=7, file='grafico-13836963')
+      open(unit=7, file='saida-1')
 
 
       ipdo = 1
