@@ -45,39 +45,8 @@
       
       end program
       
-      real*8 function dsim3(h)
-        implicit real*8 (a-h, o-z)
-        dsim3 = dext1 - ((fn(1, h) - fn(-1, h))/(2*h)) ! + O(h**2)
-      end function
       
-      real*8 function dfr2(h)
-        implicit real*8 (a-h, o-z)
-        dfr2 = dext1 - ((fn(1, h)-fn(0, h))/h)
-      end function
-      
-      real*8 function dtr2(h)
-        implicit real*8 (a-h, o-z)
-        dtr2 = dext1 - ((fn(0, h)-fn(-1, h))/h)
-      end function
-      
-      real*8 function dsim5(h)
-        implicit real*8 (a-h, o-z)
-        dsim5 = dext1 - ( (fn(-2, h)- (8*fn(-1, h)) + (8*fn(1, h)) - fn(2, h) )/(12*h) )
-      end function
-      
-      real*8 function d2sim5(h)
-        implicit real*8 (a-h, o-z)
-        d2sim5num = (0 - fn(-2, h)) + (16*fn(-1, h)) - (30*fn(0, h)) + (16*fn(1, h)) - fn(2, h)
-        d2sim5 = dext2 - ( d2sim5num/(12*(h**2)) )
-      end function
-      
-      real*8 function d3ansim5(h)
-        implicit real*8 (a-h, o-z)
-        d3ansim5num = (0-fn(-2, h)) + (2*fn(-1, h)) - (2*fn(1, h)) + fn(2, h)
-        d3ansim5 = dext3 - ( d3ansim5num/(2*(h**3)) )
-      end function
-      
-      real*8 function fn(n, h)
+      real*8 function fn(n,h)
         implicit real*8 (a-h, o-z)
         fn = f((1/2)+(n*h))
       end function
@@ -86,5 +55,42 @@
         implicit real*8 (a-h, o-z)
         f = exp(x/2)*tan(2*x)
       end function
+      
+      real*8 function dsim3(h)
+        implicit real*8 (a-h, o-z)
+        dsim3 = dext1 - ((fn(1,h) - fn(-1,h))/(2*h)) ! + O(h**2)
+      end function
+      
+      real*8 function dfr2(h)
+        implicit real*8 (a-h, o-z)
+        dfr2 = dext1 - ((fn(1,h)-fn(0,h))/h)
+      end function
+      
+      real*8 function dtr2(h)
+        implicit real*8 (a-h, o-z)
+        dtr2 = dext1 - ((fn(0,h)-fn(-1,h))/h)
+      end function
+      
+      real*8 function dsim5(h)
+        implicit real*8 (a-h, o-z)
+        dsim5 = dext1 - ( (fn(-2,h)- (8*fn(-1,h)) + (8*fn(1,h)) 
+     &   - fn(2,h) )/(12*h) )
+      end function
+      
+      real*8 function d2sim5(h)
+        implicit real*8 (a-h, o-z)
+        d2sim5num = ((0 - fn(-2,h)) + (16*fn(-1,h)) - (30*fn(0,h))
+     &    + (16*fn(1,h)) - fn(2,h))
+        d2sim5 = dext2 - ( d2sim5num/(12*(h**2)) )
+      end function
+      
+      real*8 function d3ansim5(h)
+        implicit real*8 (a-h, o-z)
+        d3ansim5num = ((0-fn(-2,h)) + (2*fn(-1,h)) - (2*fn(1,h)) + 
+     &   fn(2,h))
+        d3ansim5 = dext3 - ( d3ansim5num/(2*(h**3)) )
+      end function
+      
+
 
       
