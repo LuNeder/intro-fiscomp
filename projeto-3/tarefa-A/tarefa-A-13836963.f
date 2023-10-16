@@ -1,4 +1,4 @@
-      program
+      program a
       implicit real*8 (a-h, o-z)
       dimension h(14)
       dext1 = 9.796782013838 ! Derivada exata
@@ -18,6 +18,23 @@
       h(12) = 0.000001
       h(13) = 0.0000001
       h(14) = 0.00000001
+      
+      write(*,*) 'h                   | dsim3              | dfr2   ',
+     & '            | dtr2               |'
+      do i = 1,14
+        c0 = h(i)
+        c1 = dsim3(h(i))
+        c2 = dfr2(h(i))
+        c3 = dtr2(h(i))
+        c4 = dsim5(h(i))
+        c5 = d2sim5(h(i))
+        c6 = d3ansim5(h(i))
+        
+        write(*,4) c0, c1, c2, c3, c4, c5, c6
+4       format( 7('|', f20.10), '|')
+        
+      end do
+        
       
       
 
