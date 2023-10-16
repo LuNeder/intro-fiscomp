@@ -1,3 +1,4 @@
+
       program a
       implicit real*8 (a-h, o-z)
       dimension h(14)
@@ -19,7 +20,8 @@
       h(13) = 0.0000001
       h(14) = 0.00000001
       
-      write(*,*) 'h                   | dsim3              | dfr2   ',
+      open(file='saida-1',unit=2)
+      write(2,*) 'h                   | dsim3              | dfr2   ',
      & '            | dtr2               | dsim5              | ',
      & 'd2sim5             | d3ansim5           |'
       do i = 1,14
@@ -31,7 +33,7 @@
         c5 = d2sim5(h(i))
         c6 = d3ansim5(h(i))
         
-        write(*,4) c0, c1, c2, c3, c4, c5, c6
+        write(2,4) c0, c1, c2, c3, c4, c5, c6
 4       format( 7('|', f20.10), '|')
         
       end do
