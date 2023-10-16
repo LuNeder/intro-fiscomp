@@ -1,5 +1,5 @@
       program
-      implicit real*8 (a-g)
+      implicit real*8 (a-h, o-z)
       dimension h(14)
       dext1 = 9.796782013838 ! Derivada exata
       dext2 = 64.098324549472 ! Segunda derivada exata
@@ -20,12 +20,33 @@
       h(14) = 0.00000001
       
       
+
       
       
+      end program
       
+      real*8 function dsim3(h)
+        implicit real*8 (a-h, o-z)
+      end function
       
+      real*8 function dfr2(h)
+        implicit real*8 (a-h, o-z)
+      end function
       
+      real*8 function dtr2(h)
+        implicit real*8 (a-h, o-z)
+      end function
       
-      end program      
+      real*8 function dsim5(h)
+        implicit real*8 (a-h, o-z)
+      end function
       
+      real*8 function d2sim5(h)
+        implicit real*8 (a-h, o-z)
+      end function
+      
+      real*8 function d3ansim5(h)
+        implicit real*8 (a-h, o-z)
+      end function
+
       
