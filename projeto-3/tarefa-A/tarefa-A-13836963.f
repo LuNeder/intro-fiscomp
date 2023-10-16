@@ -2,7 +2,6 @@
       program a
       implicit real*8 (a-h, o-z)
       dimension h(14)
-      ! PASSAR PARA AS FUNCOES!!!!!
       dext1 = 9.796782013838d0 ! Derivada exata
       dext2 = 64.098324549472d0 ! Segunda derivada exata
       dext3 = 671.514613457866d0 ! Terceira derivada exata
@@ -27,12 +26,12 @@
      & 'd2sim5             | d3ansim5           |'
       do i = 1,14
         c0 = h(i)
-        c1 = dsim3(h(i))
-        c2 = dfr2(h(i))
-        c3 = dtr2(h(i))
-        c4 = dsim5(h(i))
-        c5 = d2sim5(h(i))
-        c6 = d3ansim5(h(i))
+        c1 = dext1 - dsim3(h(i))
+        c2 = dext1 - dfr2(h(i))
+        c3 = dext1 - dtr2(h(i))
+        c4 = dext1- dsim5(h(i))
+        c5 = dext2 - d2sim5(h(i))
+        c6 = dext3 - d3ansim5(h(i))
         
         write(2,4) c0, c1, c2, c3, c4, c5, c6
 4       format( 7('|', f20.10), '|')
@@ -60,22 +59,22 @@
       
       real*8 function dsim3(h)
         implicit real*8 (a-h, o-z)
-        dsim3 = dext1 - ((fn(1.0d0,h) - fn(-1.0d0,h))/(2.0d0*h)) 
+        dsim3 = ((fn(1.0d0,h) - fn(-1.0d0,h))/(2.0d0*h)) 
       end function
       
       real*8 function dfr2(h)
         implicit real*8 (a-h, o-z)
-        dfr2 = dext1 - ((fn(1.0d0,h)-fn(0.0d0,h))/h)
+        dfr2 = ((fn(1.0d0,h)-fn(0.0d0,h))/h)
       end function
       
       real*8 function dtr2(h)
         implicit real*8 (a-h, o-z)
-        dtr2 = dext1 - ((fn(0.0d0,h)-fn(-1.0d0,h))/h)
+        dtr2 = ((fn(0.0d0,h)-fn(-1.0d0,h))/h)
       end function
       
       real*8 function dsim5(h)
         implicit real*8 (a-h, o-z)
-        dsim5 = dext1 - ( (fn(-2.0d0,h)- (8.0d0*fn(-1.0d0,h)) + 
+        dsim5 = ( (fn(-2.0d0,h)- (8.0d0*fn(-1.0d0,h)) + 
      &  (8.0d0*fn(1.0d0,h))  - fn(2.0d0,h) )/(12*h) )
       end function
       
@@ -83,14 +82,14 @@
         implicit real*8 (a-h, o-z)
         d2sim5num = ((0.0d0 - fn(-2.0d0,h)) + (16.0d0*fn(-1.0d0,h)) 
      &   - (30.0d0*fn(0.0d0,h)) + (16.0d0*fn(1.0d0,h)) - fn(2.0d0,h))
-        d2sim5 = dext2 - ( d2sim5num/(12.0d0*(h**2.0d0)) )
+        d2sim5 = ( d2sim5num/(12.0d0*(h**2.0d0)) )
       end function
       
       real*8 function d3ansim5(h)
         implicit real*8 (a-h, o-z)
         d3ansim5num = ((0.0d0-fn(-2.0d0,h)) + (2.0d0*fn(-1.0d0,h)) - 
      &  (2.0d0*fn(1.0d0,h)) +  fn(2.0d0,h))
-        d3ansim5 = dext3 - ( d3ansim5num/(2.0d0*(h**3.0d0)) )
+        d3ansim5 = ( d3ansim5num/(2.0d0*(h**3.0d0)) )
       end function
       
 
