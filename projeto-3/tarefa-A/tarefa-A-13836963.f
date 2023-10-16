@@ -20,7 +20,8 @@
       h(14) = 0.00000001
       
       write(*,*) 'h                   | dsim3              | dfr2   ',
-     & '            | dtr2               |'
+     & '            | dtr2               | dsim5              | ',
+     & 'd2sim5             | d3ansim5           |'
       do i = 1,14
         c0 = h(i)
         c1 = dsim3(h(i))
