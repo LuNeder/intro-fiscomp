@@ -48,5 +48,9 @@
       real*8 function d3ansim5(h)
         implicit real*8 (a-h, o-z)
       end function
+      
+      real*8 function fn(n)
+        implicit real*8 (a-h, o-z)
+      end function
 
       
