@@ -2,6 +2,7 @@
       program a
       implicit real*8 (a-h, o-z)
       dimension h(14)
+      ! PASSAR PARA AS FUNCOES!!!!!
       dext1 = 9.796782013838d0 ! Derivada exata
       dext2 = 64.098324549472d0 ! Segunda derivada exata
       dext3 = 671.514613457866d0 ! Terceira derivada exata
