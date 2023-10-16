@@ -69,8 +69,14 @@
         implicit real*8 (a-h, o-z)
       end function
       
-      real*8 function fn(n)
+      real*8 function fn(n, h)
         implicit real*8 (a-h, o-z)
+        fn = f((1/2)+(n*h))
+      end function
+      
+      real*8 function f(x)
+        implicit real*8 (a-h, o-z)
+        f = exp(x/2)*tan(2*x)
       end function
 
       
