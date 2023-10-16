@@ -39,7 +39,8 @@
       end do
         
       
-      
+      write(2,70) dext1, dext1, dext1, dext1, dext2, dext3
+70    format('|EXATO              ', 6('|', f20.10), '|')
 
       
       
