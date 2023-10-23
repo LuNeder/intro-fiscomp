@@ -25,10 +25,12 @@
          c1 = N(i)
          c2 = h(i)
          aga = h(i)
-         c3 = tra(aga) - ext
-         c4 = sim(aga) - ext
-         c5 = boo(aga) - ext
-         aga = aga + 2*h(i)
+         do while (aga.lt.1)
+           c3 = tra(aga) - ext
+           c4 = sim(aga) - ext
+           c5 = boo(aga) - ext
+           aga = aga + 4*h(i)
+         end do
          write(2,4) c1, c2, c3, c4, c5
 4        format( 5('|', f20.10), '|')       
        end do
@@ -55,14 +57,14 @@
          implicit real*8 (a-h, o-z)
          tra2 = ((h/2.0d0)*(fn(-1.0d0, h)+(2.0d0*fn(0.0d0,h))+
      &   fn(1.0d0,h))) ! -1 a 1
-         tra = tra2/2.0d0 ! 0 a 1
+         tra = tra2!/2.0d0 ! 0 a 1
        end function
 
        real*8 function sim(h)
          implicit real*8 (a-h, o-z)
          sim2 = (h/3.0d0)*(fn(1.0d0,h)+(4.0d0*fn(0.0d0,h))+
      &   fn(-1.0d0,h))
-         sim = sim2/2.0d0
+         sim = sim2!/2.0d0
        end function
 
        real*8 function boo(h)
@@ -70,5 +72,5 @@
          boo2 = ((2.0d0*h)/45)*((7.0d0*fn(0.0d0,h))+(32.0d0*fn(1.0d0,h
      &   ))+(12.0d0*fn(2.0d0,h))+(32.0d0*fn(3.0d0,h))+
      &   (7.0d0*fn(4.0d0,h)))
-         boo = boo2/2
+         boo = boo2!/2.0d0
        end function
