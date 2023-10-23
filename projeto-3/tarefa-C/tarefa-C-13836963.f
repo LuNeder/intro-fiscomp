@@ -6,7 +6,7 @@
        r3e = 9
 
        do i=0,6
-         tmp = buscadireta(1.0d0)
+         tmp = buscadireta()
          open(unit=9, file="bd.tmp")
          read(9,*) bd1, bd2, bd3
          close(9)
@@ -27,9 +27,15 @@
          implicit real*8 (a-h, o-z)
          fx = (x**3.0d0)-(4.0d0*(x**2.0d0))-(59.0d0*x)+126.0d0
        end function
+       
+       real*8 function dfx(x)
+         implicit real*8 (a-h, o-z)
+         dfx = (3.0d0*(x**2.0d0))-(8.0d0*x)-59.0d0
+       end function
+       
 
 
-       real*8 function buscadireta(z)
+       real*8 function buscadireta()
          implicit real*8 (a-h, o-z)
          open(unit=9, file="bd.tmp")
          x = -10.0d0
@@ -55,6 +61,7 @@
          r3 = x - 0.1d0
 
          write(9,*) r1, r2, r3
-         buscadireta = 1.0d0
          close(9)
         end function
+        
+        
