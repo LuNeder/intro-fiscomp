@@ -16,7 +16,7 @@
         ! write (*,*) i
          tmp = buscadireta(x0)
         ! write (*,*) i
-         open(unit=9, file="bd.tmp")
+         open(unit=9, file=".bd.tmp")
          read(9,*) bd1, bd2, bd3
          close(9)
          
@@ -53,7 +53,7 @@
        real*8 function buscadireta(x)
          implicit real*8 (a-h, o-z)
        !  write(*,*) "bd"
-         open(unit=9, file="bd.tmp")
+         open(unit=9, file=".bd.tmp")
        !  write(*,*) "bdab"
          x = -10.0d0
          f = -10.0d0
