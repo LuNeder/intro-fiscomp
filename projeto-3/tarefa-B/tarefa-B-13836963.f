@@ -24,9 +24,11 @@
          h(i) = 1.0d0/N(i)
          c1 = N(i)
          c2 = h(i)
-         c3 = tra(h(i)) - ext
-         c4 = sim(h(i)) - ext
-         c5 = boo(h(i)) - ext
+         aga = h(i)
+         c3 = tra(aga) - ext
+         c4 = sim(aga) - ext
+         c5 = boo(aga) - ext
+         aga = aga + 2*h(i)
          write(2,4) c1, c2, c3, c4, c5
 4        format( 5('|', f20.10), '|')       
        end do
