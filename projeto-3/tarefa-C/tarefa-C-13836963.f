@@ -12,7 +12,17 @@
        xi1 = x0
        xi2 = 0.0d0
        xi3 = 7.0d0
+       open(unit=2, file="saida-1")
        
+       write(2,*) ' |      Busca Direta           ',
+     & '                                 |        Newton        ',
+     & '                                        |       Secante      ',
+     & '                                          |'
+       
+       write(2,*) 'i| r1                 | r2     ',
+     & '            | r3                 |   r1               | ',
+     & 'r2                 | r3                 | r1                 ',
+     & '| r2                 | r3                 |'
 
        do i=0,6
          
@@ -43,7 +53,7 @@
          xsec3(i) = sec(xsec3(i-1), xsec3(i-2))
          
 
-         write (*,4) i, bd1, bd2, bd3, xi1, xi2, xi3, xsec1(i),
+         write (2,4) i, bd1, bd2, bd3, xi1, xi2, xi3, xsec1(i),
      &   xsec2(i), xsec3(i)
 4        format( i2, 10('|', f20.10), '|')
 
