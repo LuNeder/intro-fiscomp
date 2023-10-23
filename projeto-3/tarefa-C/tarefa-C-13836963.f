@@ -83,13 +83,14 @@
        !  write(*,*) "bdfc"
         end function
         
-        real*8 function anr(x0)
+        real*8 function anr(x)
           implicit real*8 (a-h, o-z)
        !   write(*,*) "aqui"
-          x = x0
           anr = x - (fx(x)/dfx(x))
+        end function
+        
+        real*8 function sec(x0)
+          implicit real*8 (a-h, o-z)
           
           
         end function
-        
-        
