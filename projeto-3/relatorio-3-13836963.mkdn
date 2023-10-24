@@ -100,36 +100,81 @@ A tabela gerada:
 Assim, o melhor valor de h para as derivadas segunda e terceira parece ser 0.0005, pois é o que apresenta menor desvio em relação ao valor exato. Já para a derivada primeira, esse valor é 0.000001.
 
 
-## Tarefa B1
-O código abaixo calcula um histograma do andarilho bebado após N = 1000 passos
+## Tarefa B
+O código abaixo aproxima a integral $\int_0^1exp(-x)cos(2\pi x)dx$ por diversos métodos e imprime a diferença entre o valor calculado e o valor exato.
 
 ````fortran
-        dimension ia(-1001:1001)
-        dimension ib(0:1)
-        ia(-1001:1001) = 0
-        ib(0) = 1
-        ib(1) = -1
-        M = 100000 ! num de andarilhos
-        N = 1000 ! num de passos
-        ap = 0.5e0  ! prob dir
-        itot = 0 ! total de passos
-        iposx = 0 ! posicao
-        open(unit=1, file='saida-1')
-        do j=1,M
-          iposx = 0
-          do i=1,N
-            ir = rand()/ap ! 0 = dir 1 = esq.
-C            write(*,*) ir
-            iposx = iposx + ib(ir)           
-          end do
-C          write(*,*) 'iposx-final = ', iposx
-          ia(iposx) = ia(iposx) + 1
-        end do
-        do k = 0-N, N
-          write(1,*) k, ia(k)
-        end do
-        close(1)
-        end
+       program b
+       implicit real*8 (a-h, o-z)
+       dimension n(10)
+       dimension h(10)
+       n(1) = 12.0d0
+       n(2) = 24.0d0
+       n(3) = 48.0d0
+       n(4) = 96.0d0
+       n(5) = 192.0d0
+       n(6) = 384.0d0
+       n(7) = 768.0d0
+       n(8) = 1536.0d0
+       n(9) = 3072.0d0
+       n(10) = 6144.0d0
+       ext = 0.01561623690449082548478384d0 !exato
+
+       open(file='saida-1',unit=2)
+
+       write(2,*) 'N                   | h                  | trapezi',
+     & 'o           | simpsons           | boole              | '
+ 
+       do i=1,10
+         h(i) = 1.0d0/N(i)
+         c1 = N(i)
+         c2 = h(i)
+         aga = h(i)
+         do while (aga.lt.1)
+           c3 = tra(aga) - ext
+           c4 = sim(aga) - ext
+           c5 = boo(aga) - ext
+           aga = aga + 4*h(i)
+         end do
+         write(2,4) c1, c2, c3, c4, c5
+4        format( 5('|', f20.10), '|')       
+       end do
+       write(2,*) 'EXATO               | 0.0156162369'
+       close(2)
+       end program
+
+       real*8 function f(x)
+         implicit real*8 (a-h, o-z)
+         pi = 4.0d0*datan(1.0d0)
+         f = dexp(-x)*dcos(2.0d0*x*pi)
+       end function
+
+       real*8 function fn(an, h)
+         implicit real*8 (a-h, o-z)
+         fn = f((an)+(h))
+       end function
+
+       real*8 function tra(h)
+         implicit real*8 (a-h, o-z)
+         tra2 = ((h/2.0d0)*(fn(-1.0d0, h)+(2.0d0*fn(0.0d0,h))+
+     &   fn(1.0d0,h))) ! -1 a 1
+         tra = tra2!/2.0d0 ! 0 a 1
+       end function
+
+       real*8 function sim(h)
+         implicit real*8 (a-h, o-z)
+         sim2 = (h/3.0d0)*(fn(1.0d0,h)+(4.0d0*fn(0.0d0,h))+
+     &   fn(-1.0d0,h))
+         sim = sim2!/2.0d0
+       end function
+
+       real*8 function boo(h)
+         implicit real*8 (a-h, o-z)
+         boo2 = ((2.0d0*h)/45)*((7.0d0*fn(0.0d0,h))+(32.0d0*fn(1.0d0,h
+     &   ))+(12.0d0*fn(2.0d0,h))+(32.0d0*fn(3.0d0,h))+
+     &   (7.0d0*fn(4.0d0,h)))
+         boo = boo2!/2.0d0
+       end function
 ````
 
 O histograma ficou assim:
@@ -138,192 +183,120 @@ O histograma ficou assim:
 
 É perceptível que o gráfico fica centrado em torno do zero, como esperado para o caso de probabilidades iguais para esquerda e direita.
 
-## Tarefa B2
-Agora realizamos novamente a tarefa B1, mas alterando a probabilidade p para $\frac{1}{3}$, $\frac{1}{4}$ e $\frac{1}{5}$
-
-````fortran
-        dimension ia(-1001:1001)
-        dimension ib(0:100)
-        ia(-1001:1001) = 0
-        ib(0) = 1
-        ib(1:100) = -1
-        M = 100000 ! num de andarilhos
-        N = 1000 ! num de passos
-        ap = 0.25e0  ! prob dir - Alternar entre 1/3, 1/4 e 1/5
-        itot = 0 ! total de passos
-        iposx = 0 ! posicao
-        open(unit=1, file='saida-1')
-        do j=1,M
-          iposx = 0
-          do i=1,N
-            ir = rand()/ap ! 0 = dir 1 = esq.
-            iposx = iposx + ib(ir)           
-          end do
-          ia(iposx) = ia(iposx) + 1
-        end do
-        do k = 0-N, N
-          write(1,*) k, ia(k)
-        end do
-        close(1)
-        end
-````
-
-Assim ficam os novos histogramas:
-
-$\frac{1}{3}$:
-
-![Histograma 1/3](fotos/histo13.png)
-
-$\frac{1}{4}$:
-
-![h14](fotos/histo14.png)
-
-$\frac{1}{5}$:
-
-![h15](fotos/histo15.png)
-
 
 ## Tarefa C
-Este programa faz um mapa do problema dos andarilhos bêbados em 2D e, em seguida, calcula a média do módulo do vetor posição (<|$\vec{r}$|>) e o $\Delta^2$ de $\vec{r}$. O arquivo para o gráfico é salvo e as médias são impressas no stdout.
+Este programa calcula as raízes da função $f(x) = x^3-4x^2-59x+126$ com diversos métodos e os escreve em uma tabela, juntamente com os valores exatos.
 
 ````fortran
-        dimension ia(-1001:1001, -1001:1001)
-        ia(-1001:1001, -1001:1001) = 0
-        M = 100000 ! num de andarilhos
-        N = 10000 ! num de passos
-        ! ap = 0.25e0  ! prob cada - probs iguais
-        iposx = 0 ! posicao x
-        iposy = 0 ! posicao y
-        avetr = 0 ! magnetude do vetor posicao r
-        sumr = 0
-        sumr2 = 0
-        sx = 0
-        sy = 0
-        open(unit=1, file='saida-1')
+       program c
+       implicit real*8 (a-h, o-z)
+       dimension xsec1(-2:6)
+       dimension xsec2(-2:6)
+       dimension xsec3(-2:6)
+       ! character(len = 6) :: title
+       r1e = -7
+       r2e = 2
+       r3e = 9
+       x0 = -10.0d0
+       
+       xi1 = x0
+       xi2 = 0.0d0
+       xi3 = 7.0d0
+       open(unit=2, file="saida-1")
+       
+       write(2,*) ' |      Busca Direta           ',
+     & '                                 |        Newton        ',
+     & '                                        |       Secante      ',
+     & '                                          |'
+       
+       write(2,*) 'i| r1                 | r2     ',
+     & '            | r3                 |   r1               | ',
+     & 'r2                 | r3                 | r1                 ',
+     & '| r2                 | r3                 |'
 
-        do j=1,M
-          iposx = 0
-          iposy = 0
-          do i=1,N
-            ar = rand()
-            if (ar .lt. 0.25) then !+x
-              iposx = iposx + 1
-            else
-              if (ar .lt. 0.5) then !-x
-                iposx = iposx - 1
-              else
-                if (ar .lt. 0.75) then !+y
-                  iposy = iposy + 1
-                else !-y
-                  iposy = iposy - 1
-                end if
-              end if
-            end if 
-          end do
-          write (1, *) iposx, iposy
-          ar2 = iposx**2 + iposy**2
-          sx = sx + iposx
-          sy = sy + iposy
-          sumr2 = sumr2+ar2
-          sumr = sumr + sqrt(ar2)
-        end do
+       do i=0,6
+           	 	
+         tmp = buscadireta(x0)
+         open(unit=9, file=".bd.tmp")
+         read(9,*) bd1, bd2, bd3
+         close(9)
+         
+         xi1 = anr(xi1)
+         xi2 = anr(xi2)
+         xi3 = anr(xi3)
+         
+         xsec1(-1) = -7.8691588785d0
+         xsec1(-2) = -10.0d0        
+         xsec1(i) = sec(xsec1(i-1), xsec1(i-2))
+         
+         xsec2(-1) = 2.1355932203d0
+         xsec2(-2) = 0.0d0 
+         xsec2(i) = sec(xsec2(i-1), xsec2(i-2))
+         
+         xsec3(-1) = 11.3750000000d0
+         xsec3(-2) = 7.0d0
+         xsec3(i) = sec(xsec3(i-1), xsec3(i-2))
+         
+         write (2,4) i, bd1, bd2, bd3, xi1, xi2, xi3, xsec1(i),
+     &   xsec2(i), xsec3(i)
+4        format( i2, 10('|', f20.10), '|')
+       end do
+       
+       write (2,*) "EXT|     -7.0000000000|        2.0000000000|",
+     & "        9.0000000000|"
+       end program
 
-        close(1)
-        write(*,*) '<|r|> = ', (sumr/M)
-        write(*,*) '∆² = ', ((sumr2 -((sx**2) + (sy**2)))/M)
-        end
+       real*8 function fx(x)
+         implicit real*8 (a-h, o-z)
+         fx = (x**3.0d0)-(4.0d0*(x**2.0d0))-(59.0d0*x)+126.0d0
+       end function
+       
+       real*8 function dfx(x)
+         implicit real*8 (a-h, o-z)
+         dfx = (3.0d0*(x**2.0d0))-(8.0d0*x)-59.0d0
+       end function
+       
+       real*8 function buscadireta(x)
+         implicit real*8 (a-h, o-z)
+         open(unit=9, file=".bd.tmp")
+         x = -10.0d0
+         f = -10.0d0
+         do while (f.lt.0)
+           f = fx(x)
+           x = x + 0.1d0    
+         end do
+         r1 = x - 0.2d0
+         f=10.0d0
+
+         do while (f.gt.0)
+           f = fx(x)
+           x = x + 0.1d0    
+         end do
+         r2 = x - 0.2d0
+         f=-10.0d0
+
+         do while (f.lt.0)
+           f = fx(x)
+           x = x + 0.1d0    
+         end do
+         r3 = x - 0.2d0
+
+         write(9,*) r1, r2, r3
+         close(9)
+        end function
+        
+        real*8 function anr(x)
+          implicit real*8 (a-h, o-z)
+          anr = x - (fx(x)/dfx(x))
+        end function
+        
+        real*8 function sec(x,xold)
+          implicit real*8 (a-h, o-z)
+          sec = x - ( fx(x) * ( (x - xold)/(fx(x)-fx(xold)) ) )
+          
+        end function
 ````
 
-Abaixo um exemplo da média e $\Delta^2$ para 10000 passos, seguido pelos mapas para N =10, 100, 1000, 10000, $10^5$ e $10^6$, respectivamente:
+Abaixo os resultados:
 
 ![c](fotos/c.png)
-
-![10](fotos/c10.png)
-
-![100](fotos/c100.png)
-
-![1000](fotos/c1000.png)
-
-![10000](fotos/c10000.png)
-
-![e5](fotos/c1e5.png)
-
-![e6](fotos/c1e6.png)
-
-É perceptível que quanto maior o número de passos mais longe da origem os andarilhos vão, no entanto a visão geral se mantém centrada nela.
-
-## Tarefa D
-Agora calculamos a entropia do problema C, definindo o tamanho de um reticulado de 10 passos. O código é construído ao redor do da tarefa C, tendo em vista calculara entropia da mesma situação vista em tal tarefa.
-O código, então, faz o gráfico da entropia.
-
-````fortran
-      dimension mapa(-1000:1000,-1000:1000)
-
-      open(unit=7, file='grafico-13836963')
-
-      ipdo = 1
-      N = 1000 !andarilhos 
-      M = 1000 !passos
-      do while(ipdo.le.M)
-        mapa(-1000:1000,-1000:1000) = 0
-
-       ! tarefa C
-        do j=1,N
-          iposx = 0
-          iposy = 0
-          do i=1,ipdo
-            ar = rand()
-            if (ar .lt. 0.25) then !+x
-              iposx = iposx + 1
-            else
-              if (ar .lt. 0.5) then !-x
-                iposx = iposx - 1
-              else
-                if (ar .lt. 0.75) then !+y
-                  iposy = iposy + 1
-                else !-y
-                  iposy = iposy - 1
-                end if
-              end if
-            end if 
-          end do
-          mapa(iposx,iposy) = mapa(iposx,iposy) + 1
-        end do 
-        ! fim tarefa C
-
-        an = n
-        iret = 10
-        e = 0
-
-        i = 0 - M
-        do while(i.lt.M)
-          j = 0 - M
-          do while(j.lt.M)
-            apt = 0
-            do k=i,i+iret
-              do l=j,j+iret
-                apt = apt + mapa(k,l)
-              end do
-            end do
-            if(apt.gt.0) then
-                aprob = apt/an
-                e = e - aprob*log(aprob)   
-            end if
-            j = j + iret
-          end do
-          i = i + iret
-        end do
-
-        write(7,*) ipdo, e
-        ipdo = ipdo + 1
-      end do
-
-      close(7)
-      end
-````
-
-Este é o gráfico da entropia:
-
-![entropia](fotos/entropia.png)
-
-Percebe-se que a entropia aumenta com o tempo, como esperado, e tem uma forma logarítmica.
