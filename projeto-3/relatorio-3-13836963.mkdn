@@ -1,6 +1,7 @@
 # Projeto 3
 <!-- Compilar com: pandoc ./relatorio-3-13836963.mkdn --pdf-engine=lualatex -f markdown-implicit_figures -o ./relatorio-3-13836963.pdf -->
 
+
 ## Tarefa A
 O código abaixo aproxima a derivada da função $f(x)=e^{\frac{x}{2}}tan(2x)$, com $x_0=1$ e escreve uma tabela com a diferença entre o valor calculado e o exato.
 
@@ -177,11 +178,11 @@ O código abaixo aproxima a integral $\int_0^1exp(-x)cos(2\pi x)dx$ por diversos
        end function
 ````
 
-O histograma ficou assim:
+O resultado foi esse:
 
-![Histograma](fotos/histoB.png)
+![b](fotos/b.png)
 
-É perceptível que o gráfico fica centrado em torno do zero, como esperado para o caso de probabilidades iguais para esquerda e direita.
+Nesse caso claramente há algo errado, visto que a diferença é de ordem maior que o próprio resultado.
 
 
 ## Tarefa C
@@ -193,7 +194,6 @@ Este programa calcula as raízes da função $f(x) = x^3-4x^2-59x+126$ com diver
        dimension xsec1(-2:6)
        dimension xsec2(-2:6)
        dimension xsec3(-2:6)
-       ! character(len = 6) :: title
        r1e = -7
        r2e = 2
        r3e = 9
