@@ -20,7 +20,7 @@
          thetz = theta
          theta = theta + (omega * dt)
          omega = omega - ((g/al)*thetz*dt)
-         e =  l * am * ( (((omega**2)*l)/2.0d0) + (g*(1-dcos(theta))) )
+         e =  l * am * ((((omega**2)*l)/2.0d0) + (g*(1-dcos(theta))))
 
          if(abs(theta).ge.2.0d0*pi) then
            write(7,*) t,mod(theta,2.0d0*pi)
@@ -37,14 +37,3 @@
        
        end program
        
-       real*8 function omega()
-         implicit real*8 (a-h, o-z)
-         omega = 
-         
-       end function
-       
-       real*8 function theta()
-         implicit real*8 (a-h, o-z)
-         
-         
-       end function
