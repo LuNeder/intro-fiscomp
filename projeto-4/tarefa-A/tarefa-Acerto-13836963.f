@@ -1,4 +1,3 @@
-       program a
        implicit real*8 (a-h, o-z)
        g = 9.8d0
        al = 9.8d0
@@ -36,5 +35,5 @@
        close(9)
        close(7)
        
-       end program
+       end
        
