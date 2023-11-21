@@ -10,15 +10,14 @@
        pi = 4.0d0*datan(1.0d0)
        omega = 0.0d0
        theta = pi/6.0d0
+       gamma = 0.5d0
        
        open(unit=7, file="theta-certo")
 
        do while (t.lt.tmax)
          t = t + dt
          theta = theta + (omega * dt)
-         omega = omega - (g/r)*theta*deltat - gamma*omega*deltat
-
-         write(9,*) t, e
+         omega = omega - (g/al)*theta*dt - gamma*omega*dt
 
          if(abs(theta).ge.2.0d0*pi) then
            write(7,*) t,mod(theta,2.0d0*pi)
