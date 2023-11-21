@@ -16,10 +16,10 @@
        omega2 = 0.0d0
        theta2 = (pi/6.0d0) +0.001d0
      
-       F0 = 0.5d0
+       F0 = 1.2d0
        
-       open(unit=7, file="omega-05")
-       open(unit=9, file="omega2-05")
+       open(unit=7, file="omega-12")
+       open(unit=9, file="omega2-12")
 
        do while (t.lt.tmax)
          t = t + dt
@@ -31,9 +31,11 @@
          omega2 = omega2 - (g/al)*dsin(theta2)*dt - gamma*omega2*dt + F0
      &*dsin(OMEGAM*t)*dt
 
-         write(7,*) t,dlog(abs(omega2-omega))
+         write(7,*) theta, omega
+         write(9,*) theta2, omega2
        end do
 
        close(7)
+       close(9)
        end
        
