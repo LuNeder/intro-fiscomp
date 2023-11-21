@@ -3,6 +3,7 @@
 
 
 ## Tarefa A
+
 O código abaixo calcula o problema do pêndulo pelo método de Euler, no entanto - como pede o enunciado - está errado.
 
 ````fortran
@@ -55,7 +56,7 @@ Como podemos ver, o resultado do theta e da energia (respectivamente) não fazem
 ![energia](fotos/energiaA.png)
 
 
-Para corrigir o problema, se deve fazer uma pequena alteração no código (abaixo representada por uma diff, por simplicidade):
+Para corrigir o problema, se deve fazer uma pequena alteração no código (abaixo representada por uma [diff](https://en.wikipedia.org/wiki/Diff), por simplicidade) para utilizar o Euler-Cromer:
 
 ````diff
 15,16c15,16
@@ -77,8 +78,15 @@ Para corrigir o problema, se deve fazer uma pequena alteração no código (abai
 
 ````
 
+Assim o theta e energia ficam mais plausíveis:
+
+![thetacerto](fotos/thetaAcerto.png)
+
+![energiacerta](fotos/energiaAcerto.png)
+
 ## Tarefa B
-O código abaixo aproxima a integral $\int_0^1exp(-x)cos(2\pi x)dx$ por diversos métodos e imprime a diferença entre o valor calculado e o valor exato.
+
+Agora é considerado o pêndulo com
 
 ````fortran
        program b
