@@ -1,0 +1,302 @@
+# Projeto 3
+<!-- Compilar com: pandoc ./relatorio-3-13836963.mkdn --pdf-engine=lualatex -f markdown-implicit_figures -o ./relatorio-3-13836963.pdf -->
+
+
+## Tarefa A
+O código abaixo calcula o problema do pêndulo pelo método de Euler, no entanto - como pede o enunciado - está errado.
+
+````fortran
+      program a
+      implicit real*8 (a-h, o-z)
+      dimension h(14)
+      dext1 = 9.796782013838d0 ! Derivada exata
+      dext2 = 64.098324549472d0 ! Segunda derivada exata
+      dext3 = 671.514613457866d0 ! Terceira derivada exata
+      h(1) = 0.5d0
+      h(2) = 0.2d0
+      h(3) = 0.1d0
+      h(4) = 0.05d0
+      h(5) = 0.01d0
+      h(6) = 0.005d0
+      h(7) = 0.001d0
+      h(8) = 0.0005d0
+      h(9) = 0.0001d0
+      h(10) = 0.00005d0
+      h(11) = 0.00001d0
+      h(12) = 0.000001d0
+      h(13) = 0.0000001d0
+      h(14) = 0.00000001d0
+      
+      open(file='saida-1',unit=2)
+      write(2,*) 'h                   | dsim3              | dfr2   ',
+     & '            | dtr2               | dsim5              | ',
+     & 'd2sim5             | d3ansim5           |'
+      do i = 1,14
+        c0 = h(i)
+        c1 = dext1 - dsim3(h(i))
+        c2 = dext1 - dfr2(h(i))
+        c3 = dext1 - dtr2(h(i))
+        c4 = dext1- dsim5(h(i))
+        c5 = dext2 - d2sim5(h(i))
+        c6 = dext3 - d3ansim5(h(i))
+        
+        write(2,4) c0, c1, c2, c3, c4, c5, c6
+4       format( 7('|', f20.10), '|')
+      end do
+              
+      write(2,70) dext1, dext1, dext1, dext1, dext2, dext3
+70    format('| EXATO              ', 6('|', f20.10), '|')
+      end program
+      
+      real*8 function fn(an,h)
+        implicit real*8 (a-h, o-z)
+        fn = f((0.5d0)+(an*h))
+      end function
+      
+      real*8 function f(x)
+        implicit real*8 (a-h, o-z)
+        f = dexp(x/2.0d0)*dtan(2.0d0*x)
+      end function
+      
+      real*8 function dsim3(h)
+        implicit real*8 (a-h, o-z)
+        dsim3 = ((fn(1.0d0,h) - fn(-1.0d0,h))/(2.0d0*h)) 
+      end function
+      
+      real*8 function dfr2(h)
+        implicit real*8 (a-h, o-z)
+        dfr2 = ((fn(1.0d0,h)-fn(0.0d0,h))/h)
+      end function
+      
+      real*8 function dtr2(h)
+        implicit real*8 (a-h, o-z)
+        dtr2 = ((fn(0.0d0,h)-fn(-1.0d0,h))/h)
+      end function
+      
+      real*8 function dsim5(h)
+        implicit real*8 (a-h, o-z)
+        dsim5 = ( (fn(-2.0d0,h)- (8.0d0*fn(-1.0d0,h)) + 
+     &  (8.0d0*fn(1.0d0,h))  - fn(2.0d0,h) )/(12*h) )
+      end function
+      
+      real*8 function d2sim5(h)
+        implicit real*8 (a-h, o-z)
+        d2sim5num = ((0.0d0 - fn(-2.0d0,h)) + (16.0d0*fn(-1.0d0,h)) 
+     &   - (30.0d0*fn(0.0d0,h)) + (16.0d0*fn(1.0d0,h)) - fn(2.0d0,h))
+        d2sim5 = ( d2sim5num/(12.0d0*(h**2.0d0)) )
+      end function
+      
+      real*8 function d3ansim5(h)
+        implicit real*8 (a-h, o-z)
+        d3ansim5num = ((0.0d0-fn(-2.0d0,h)) + (2.0d0*fn(-1.0d0,h)) - 
+     &  (2.0d0*fn(1.0d0,h)) +  fn(2.0d0,h))
+        d3ansim5 = ( d3ansim5num/(2.0d0*(h**3.0d0)) )
+      end function
+````
+
+A tabela gerada:
+
+![tarefaA](fotos/Captura-de-tela_2023-10-23_21-02-26.png)
+
+Assim, o melhor valor de h para as derivadas segunda e terceira parece ser 0.0005, pois é o que apresenta menor desvio em relação ao valor exato. Já para a derivada primeira, esse valor é 0.000001.
+
+
+## Tarefa B
+O código abaixo aproxima a integral $\int_0^1exp(-x)cos(2\pi x)dx$ por diversos métodos e imprime a diferença entre o valor calculado e o valor exato.
+
+````fortran
+       program b
+       implicit real*8 (a-h, o-z)
+       dimension n(10)
+       dimension h(10)
+       n(1) = 12.0d0
+       n(2) = 24.0d0
+       n(3) = 48.0d0
+       n(4) = 96.0d0
+       n(5) = 192.0d0
+       n(6) = 384.0d0
+       n(7) = 768.0d0
+       n(8) = 1536.0d0
+       n(9) = 3072.0d0
+       n(10) = 6144.0d0
+       ext = 0.01561623690449082548478384d0 !exato
+
+       open(file='saida-1',unit=2)
+
+       write(2,*) 'N                   | h                  | trapezi',
+     & 'o           | simpsons           | boole              | '
+ 
+       do i=1,10
+         h(i) = 1.0d0/N(i)
+         c1 = N(i)
+         c2 = h(i)
+         aga = h(i)
+         do while (aga.lt.1)
+           c3 = tra(aga) - ext
+           c4 = sim(aga) - ext
+           c5 = boo(aga) - ext
+           aga = aga + 4*h(i)
+         end do
+         write(2,4) c1, c2, c3, c4, c5
+4        format( 5('|', f20.10), '|')       
+       end do
+       write(2,*) 'EXATO               | 0.0156162369'
+       close(2)
+       end program
+
+       real*8 function f(x)
+         implicit real*8 (a-h, o-z)
+         pi = 4.0d0*datan(1.0d0)
+         f = dexp(-x)*dcos(2.0d0*x*pi)
+       end function
+
+       real*8 function fn(an, h)
+         implicit real*8 (a-h, o-z)
+         fn = f((an)+(h))
+       end function
+
+       real*8 function tra(h)
+         implicit real*8 (a-h, o-z)
+         tra2 = ((h/2.0d0)*(fn(-1.0d0, h)+(2.0d0*fn(0.0d0,h))+
+     &   fn(1.0d0,h))) ! -1 a 1
+         tra = tra2!/2.0d0 ! 0 a 1
+       end function
+
+       real*8 function sim(h)
+         implicit real*8 (a-h, o-z)
+         sim2 = (h/3.0d0)*(fn(1.0d0,h)+(4.0d0*fn(0.0d0,h))+
+     &   fn(-1.0d0,h))
+         sim = sim2!/2.0d0
+       end function
+
+       real*8 function boo(h)
+         implicit real*8 (a-h, o-z)
+         boo2 = ((2.0d0*h)/45)*((7.0d0*fn(0.0d0,h))+(32.0d0*fn(1.0d0,h
+     &   ))+(12.0d0*fn(2.0d0,h))+(32.0d0*fn(3.0d0,h))+
+     &   (7.0d0*fn(4.0d0,h)))
+         boo = boo2!/2.0d0
+       end function
+````
+
+O resultado foi esse:
+
+![b](fotos/b.png)
+
+Nesse caso claramente há algo errado, visto que a diferença é de ordem maior que o próprio resultado.
+
+
+## Tarefa C
+Este programa calcula as raízes da função $f(x) = x^3-4x^2-59x+126$ com diversos métodos e os escreve em uma tabela, juntamente com os valores exatos.
+
+````fortran
+       program c
+       implicit real*8 (a-h, o-z)
+       dimension xsec1(-2:6)
+       dimension xsec2(-2:6)
+       dimension xsec3(-2:6)
+       r1e = -7
+       r2e = 2
+       r3e = 9
+       x0 = -10.0d0
+       
+       xi1 = x0
+       xi2 = 0.0d0
+       xi3 = 7.0d0
+       open(unit=2, file="saida-1")
+       
+       write(2,*) ' |      Busca Direta           ',
+     & '                                 |        Newton        ',
+     & '                                        |       Secante      ',
+     & '                                          |'
+       
+       write(2,*) 'i| r1                 | r2     ',
+     & '            | r3                 |   r1               | ',
+     & 'r2                 | r3                 | r1                 ',
+     & '| r2                 | r3                 |'
+
+       do i=0,6
+           	 	
+         tmp = buscadireta(x0)
+         open(unit=9, file=".bd.tmp")
+         read(9,*) bd1, bd2, bd3
+         close(9)
+         
+         xi1 = anr(xi1)
+         xi2 = anr(xi2)
+         xi3 = anr(xi3)
+         
+         xsec1(-1) = -7.8691588785d0
+         xsec1(-2) = -10.0d0        
+         xsec1(i) = sec(xsec1(i-1), xsec1(i-2))
+         
+         xsec2(-1) = 2.1355932203d0
+         xsec2(-2) = 0.0d0 
+         xsec2(i) = sec(xsec2(i-1), xsec2(i-2))
+         
+         xsec3(-1) = 11.3750000000d0
+         xsec3(-2) = 7.0d0
+         xsec3(i) = sec(xsec3(i-1), xsec3(i-2))
+         
+         write (2,4) i, bd1, bd2, bd3, xi1, xi2, xi3, xsec1(i),
+     &   xsec2(i), xsec3(i)
+4        format( i2, 10('|', f20.10), '|')
+       end do
+       
+       write (2,*) "EXT|     -7.0000000000|        2.0000000000|",
+     & "        9.0000000000|"
+       end program
+
+       real*8 function fx(x)
+         implicit real*8 (a-h, o-z)
+         fx = (x**3.0d0)-(4.0d0*(x**2.0d0))-(59.0d0*x)+126.0d0
+       end function
+       
+       real*8 function dfx(x)
+         implicit real*8 (a-h, o-z)
+         dfx = (3.0d0*(x**2.0d0))-(8.0d0*x)-59.0d0
+       end function
+       
+       real*8 function buscadireta(x)
+         implicit real*8 (a-h, o-z)
+         open(unit=9, file=".bd.tmp")
+         x = -10.0d0
+         f = -10.0d0
+         do while (f.lt.0)
+           f = fx(x)
+           x = x + 0.1d0    
+         end do
+         r1 = x - 0.2d0
+         f=10.0d0
+
+         do while (f.gt.0)
+           f = fx(x)
+           x = x + 0.1d0    
+         end do
+         r2 = x - 0.2d0
+         f=-10.0d0
+
+         do while (f.lt.0)
+           f = fx(x)
+           x = x + 0.1d0    
+         end do
+         r3 = x - 0.2d0
+
+         write(9,*) r1, r2, r3
+         close(9)
+        end function
+        
+        real*8 function anr(x)
+          implicit real*8 (a-h, o-z)
+          anr = x - (fx(x)/dfx(x))
+        end function
+        
+        real*8 function sec(x,xold)
+          implicit real*8 (a-h, o-z)
+          sec = x - ( fx(x) * ( (x - xold)/(fx(x)-fx(xold)) ) )
+          
+        end function
+````
+
+Abaixo os resultados:
+
+![c](fotos/c.png)
