@@ -16,7 +16,7 @@
         t = 0.0d0
 
         erro = thetz*0.01d0
-        h = (thetz-erro)/10000.0d0
+        h = 1/10000.0d0
         hi = h
 
         do while(h.le.(thetz-erro))
