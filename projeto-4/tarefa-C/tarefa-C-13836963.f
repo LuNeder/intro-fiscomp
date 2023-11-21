@@ -30,7 +30,7 @@
          omega2 = omega2 - (g/al)*dsin(theta2)*dt - gamma*omega2*dt + F0
      &*dsin(OMEGAM*t)*dt
 
-         write(7,*) t,dlog(abs(omega2-omega))
+         write(7,*) t,dlog(abs(theta2-theta))
        end do
 
        close(7)

@@ -18,7 +18,8 @@
      
        F0 = 0.5d0
        
-       open(unit=7, file="005dtheta-05")
+       open(unit=7, file="omega-05")
+       open(unit=9, file="omega2-05")
 
        do while (t.lt.tmax)
          t = t + dt
