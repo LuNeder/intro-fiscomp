@@ -16,6 +16,7 @@
        F0 = 0.0d0
        
        open(unit=7, file="theta-0")
+       open(unit=9, file="omega-0")
 
        do while (t.lt.tmax)
          t = t + dt
@@ -23,6 +24,7 @@
          omega = omega - (g/al)*dsin(theta)*dt - gamma*omega*dt + F0
      &*dsin(OMEGAM*t)*dt
 
+         write(9,*) t,omega
          if(abs(theta).ge.2.0d0*pi) then
            write(7,*) t,mod(theta,2.0d0*pi)
          else
