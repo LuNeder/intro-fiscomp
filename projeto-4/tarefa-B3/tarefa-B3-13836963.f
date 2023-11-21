@@ -11,16 +11,12 @@
        omega = 0.0d0
        theta = pi/6.0d0
        
-
        open(unit=7, file="theta-certo")
-       open(unit=9, file="energia-certo")
 
        do while (t.lt.tmax)
          t = t + dt
-         
          theta = theta + (omega * dt)
-         omega = omega - ((g/al)*theta*dt)
-         e =  al * am * ((((omega**2)*al)/2.0d0) + (g*(1-dcos(theta))))
+         omega = omega - (g/r)*theta*deltat - gamma*omega*deltat
 
          write(9,*) t, e
 
@@ -29,11 +25,9 @@
          else
            write(7,*) t,theta
          end if
-
        end do
 
        close(9)
        close(7)
-       
        end
        
