@@ -327,117 +327,169 @@ $F_0=1.2$:
 No caso 1.2 o movimento não tem mais características periódicas, mas sim caóticas.
 
 ## Tarefa C
-Agora é pedido para considerar $\gamma = 0.05, \Omega=\frac{2}{3}, \Delta t=0.04$, para  $F_0 = 0.5$  e  $F_0=1.2$e fazer o gráfico de $\omega e \theta$ para diversos $F_0$. Com o código abaixo, alterando a variável F0, isso é possível:
+Agora é pedido para considerar $\gamma = 0.05, \Omega=\frac{2}{3}, \Delta t=0.04$, para $F_0 = 0.5$ e  $F_0=1.2$. Considerando dois pêndulos soltos de ângulos ligeiramente diferentes, gráfico de $\Delta\theta$ é feito:
 
 ````fortran
-       program c
        implicit real*8 (a-h, o-z)
-       dimension xsec1(-2:6)
-       dimension xsec2(-2:6)
-       dimension xsec3(-2:6)
-       r1e = -7
-       r2e = 2
-       r3e = 9
-       x0 = -10.0d0
-       
-       xi1 = x0
-       xi2 = 0.0d0
-       xi3 = 7.0d0
-       open(unit=2, file="saida-1")
-       
-       write(2,*) ' |      Busca Direta           ',
-     & '                                 |        Newton        ',
-     & '                                        |       Secante      ',
-     & '                                          |'
-       
-       write(2,*) 'i| r1                 | r2     ',
-     & '            | r3                 |   r1               | ',
-     & 'r2                 | r3                 | r1                 ',
-     & '| r2                 | r3                 |'
+       g = 9.8d0
+       al = 9.8d0
+       am = 1.0d0
 
-       do i=0,6
-           	 	
-         tmp = buscadireta(x0)
-         open(unit=9, file=".bd.tmp")
-         read(9,*) bd1, bd2, bd3
-         close(9)
-         
-         xi1 = anr(xi1)
-         xi2 = anr(xi2)
-         xi3 = anr(xi3)
-         
-         xsec1(-1) = -7.8691588785d0
-         xsec1(-2) = -10.0d0        
-         xsec1(i) = sec(xsec1(i-1), xsec1(i-2))
-         
-         xsec2(-1) = 2.1355932203d0
-         xsec2(-2) = 0.0d0 
-         xsec2(i) = sec(xsec2(i-1), xsec2(i-2))
-         
-         xsec3(-1) = 11.3750000000d0
-         xsec3(-2) = 7.0d0
-         xsec3(i) = sec(xsec3(i-1), xsec3(i-2))
-         
-         write (2,4) i, bd1, bd2, bd3, xi1, xi2, xi3, xsec1(i),
-     &   xsec2(i), xsec3(i)
-4        format( i2, 10('|', f20.10), '|')
+       tmax = 80.0d0
+       t = 0.0d0
+       dt = 0.04d0
+
+       pi = 4.0d0*datan(1.0d0)
+       omega = 0.0d0
+       theta = pi/6.0d0
+       gamma = 0.05d0
+       OMEGAM = 2.0d0/3.0d0  
+
+       omega2 = 0.0d0
+       theta2 = (pi/6.0d0) +0.001d0
+     
+       F0 = 0.5d0
+       
+       open(unit=7, file="005dtheta-05")
+       do while (t.lt.tmax)
+         t = t + dt
+         theta = theta + (omega * dt)
+         omega = omega - (g/al)*dsin(theta)*dt - gamma*omega*dt + F0
+     &*dsin(OMEGAM*t)*dt
+
+         theta2 = theta2 + (omega2 * dt)
+         omega2 = omega2 - (g/al)*dsin(theta2)*dt - gamma*omega2*dt + F0
+     &*dsin(OMEGAM*t)*dt
+
+         write(7,*) t,dlog(abs(theta2-theta))
        end do
-       
-       write (2,*) "EXT|     -7.0000000000|        2.0000000000|",
-     & "        9.0000000000|"
-       end program
-
-       real*8 function fx(x)
-         implicit real*8 (a-h, o-z)
-         fx = (x**3.0d0)-(4.0d0*(x**2.0d0))-(59.0d0*x)+126.0d0
-       end function
-       
-       real*8 function dfx(x)
-         implicit real*8 (a-h, o-z)
-         dfx = (3.0d0*(x**2.0d0))-(8.0d0*x)-59.0d0
-       end function
-       
-       real*8 function buscadireta(x)
-         implicit real*8 (a-h, o-z)
-         open(unit=9, file=".bd.tmp")
-         x = -10.0d0
-         f = -10.0d0
-         do while (f.lt.0)
-           f = fx(x)
-           x = x + 0.1d0    
-         end do
-         r1 = x - 0.2d0
-         f=10.0d0
-
-         do while (f.gt.0)
-           f = fx(x)
-           x = x + 0.1d0    
-         end do
-         r2 = x - 0.2d0
-         f=-10.0d0
-
-         do while (f.lt.0)
-           f = fx(x)
-           x = x + 0.1d0    
-         end do
-         r3 = x - 0.2d0
-
-         write(9,*) r1, r2, r3
-         close(9)
-        end function
-        
-        real*8 function anr(x)
-          implicit real*8 (a-h, o-z)
-          anr = x - (fx(x)/dfx(x))
-        end function
-        
-        real*8 function sec(x,xold)
-          implicit real*8 (a-h, o-z)
-          sec = x - ( fx(x) * ( (x - xold)/(fx(x)-fx(xold)) ) )
-          
-        end function
+       close(7)
+       end
 ````
 
 Abaixo os resultados:
 
-![c](fotos/c.png)
+$F_0 = 0.5$:
+
+![c05](fotos/c05.png)
+
+$F_0 = 1.2$:
+
+![c12](fotos/c12.png)
+
+Temos que para $\gamma = 0.05$ ambos os $F_0$ solicitados são caóticos.
+
+## Tarefa D
+
+Agora é pedido o gráfico de $\omega$, para $F_0 = 0.5$ e  $F_0=1.2$, também comparando dois pêndulos com situações iniciais levemente distintas.
+
+````fortran
+       implicit real*8 (a-h, o-z)
+       g = 9.8d0
+       al = 9.8d0
+       am = 1.0d0
+
+       tmax = 80.0d0
+       t = 0.0d0
+       dt = 0.04d0
+
+       pi = 4.0d0*datan(1.0d0)
+       omega = 0.0d0
+       theta = pi/6.0d0
+       gamma = 0.05d0
+       OMEGAM = 2.0d0/3.0d0  
+
+       omega2 = 0.0d0
+       theta2 = (pi/6.0d0) +0.001d0
+     
+       F0 = 1.2d0
+       
+       open(unit=7, file="omega-12")
+       open(unit=9, file="omega2-12")
+
+       do while (t.lt.tmax)
+         t = t + dt
+         theta = theta + (omega * dt)
+         omega = omega - (g/al)*dsin(theta)*dt - gamma*omega*dt + F0
+     &*dsin(OMEGAM*t)*dt
+
+         theta2 = theta2 + (omega2 * dt)
+         omega2 = omega2 - (g/al)*dsin(theta2)*dt - gamma*omega2*dt + F0
+     &*dsin(OMEGAM*t)*dt
+
+         write(7,*) theta, omega
+         write(9,*) theta2, omega2
+       end do
+
+       close(7)
+       close(9)
+       end
+````
+
+$F_0 = 0.5$:
+
+![0.5](fotos/d05.png)
+
+$F_0 = 1.2$:
+
+![1.2](fotos/d12.png)
+
+
+## Tarefa E
+
+Por fim, é pedida a secção de Poincaré do caso anterior
+
+````fortran
+       implicit real*8 (a-h, o-z)
+       g = 9.8d0
+       al = 9.8d0
+       am = 1.0d0
+
+       tmax = 80.0d0
+       t = 0.0d0
+       dt = 0.04d0
+
+       pi = 4.0d0*datan(1.0d0)
+       omega = 0.0d0
+       theta = pi/6.0d0
+       gamma = 0.05d0
+       OMEGAM = 2.0d0/3.0d0  
+
+       omega2 = 0.0d0
+       theta2 = (pi/6.0d0) +0.001d0
+     
+       F0 = 0.5d0
+       
+       open(unit=7, file="poincare-05")
+       open(unit=9, file="poincare2-05")
+
+       do while (t.lt.tmax)
+         t = t + dt
+         theta = theta + (omega * dt)
+         omega = omega - (g/al)*dsin(theta)*dt - gamma*omega*dt + F0
+     &*dsin(OMEGAM*t)*dt
+
+         theta2 = theta2 + (omega2 * dt)
+         omega2 = omega2 - (g/al)*dsin(theta2)*dt - gamma*omega2*dt + F0
+     &*dsin(OMEGAM*t)*dt
+
+        
+         n = OMEGAM*t/pi
+         if (abs(t-(n*pi/OMEGAM)).lt.dt/2.0d0) then
+           write(7,*) theta, omega
+           write(9,*) theta2, omega2
+         end if
+       end do
+
+       close(7)
+       close(9)
+       end
+````
+
+$F_0 = 0.5$:
+
+![poincare para 0.5](fotos/poincare05.png)
+
+$F_0 = 1.2$:
+
+![poincare para 1.2](fotos/poincare12.png)
