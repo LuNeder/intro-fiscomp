@@ -13,10 +13,10 @@
        gamma = 0.5d0
        OMEGAM = 2.0d0/3.0d0  
      
-       F0 = 0.0d0
+       F0 = 1.2d0
        
-       open(unit=7, file="theta-0")
-       open(unit=9, file="omega-0")
+       open(unit=7, file="theta-12")
+       open(unit=9, file="omega-12")
 
        do while (t.lt.tmax)
          t = t + dt
