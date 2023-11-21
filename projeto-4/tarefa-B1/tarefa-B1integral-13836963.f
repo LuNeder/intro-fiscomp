@@ -41,9 +41,7 @@
 
       real*8 function b(x,x0,h)
         implicit real*8 (a-h,o-z)
-
         b = 2.0d0*h/45.0d0*(7.0d0*f(x,x0,0.0d0)+32.0d0*f(x,x0,h*1.0d0)
      &+12.0d0*f(x,x0,h*2.0d0)+32.0d0*f(x,x0,3.0d0*h)+7.0d0*f(x,x
      &0,4.0d0*h))
-
       end function
