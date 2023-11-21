@@ -9,30 +9,31 @@
       open(unit=7,file="periodo")
 
       do i=1,30
-            theta = 0.1d0*i
-            thetz = theta
-            omega = 0.0d0
+        theta = 0.1d0*i
+        thetz = theta
+        omega = 0.0d0
 
-            t = 0.0d0
-            oscilacoes = 0
+        t = 0.0d0
+        oscilacoes = 0
 
-            do while(oscilacoes.lt.100)
-                  omegz = omega
-                  t = t + dt
+        do while(oscilacoes.lt.100)
+          omegz = omega
+          t = t + dt
 
-                  omega = omega - (g/al)*dsin(theta)*dt
-                  theta = theta + omega*dt
+          omega = omega - (g/al)*dsin(theta)*dt
+          theta = theta + omega*dt
 
-                  if(omega*omegz.lt.0.0d0)then
-                        oscilacoes = oscilacoes + 1
-                  end if
-            end do
+          if(omega*omegz.lt.0.0d0)then
+            oscilacoes = oscilacoes + 1
+          end if
+        end do
 
-            if(abs(theta).ge.2.0d0*pi) then
-                  write(7,*)t,mod(thetz,2.0d0*pi)
-            else
-                  write(7,*)t,thetz
-            end if
+        t = t/50.d0
+        if(abs(theta).ge.2.0d0*pi) then
+          write(7,*)t,mod(thetz,2.0d0*pi)
+        else
+          write(7,*)t,thetz
+        end if
       end do
 
       close(7)
