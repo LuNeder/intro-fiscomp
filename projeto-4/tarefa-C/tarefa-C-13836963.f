@@ -10,15 +10,15 @@
        pi = 4.0d0*datan(1.0d0)
        omega = 0.0d0
        theta = pi/6.0d0
-       gamma = 0.5d0
+       gamma = 0.05d0
        OMEGAM = 2.0d0/3.0d0  
 
        omega2 = 0.0d0
        theta2 = (pi/6.0d0) +0.001d0
      
-       F0 = 1.2d0
+       F0 = 0.5d0
        
-       open(unit=7, file="dtheta-12")
+       open(unit=7, file="005dtheta-05")
 
        do while (t.lt.tmax)
          t = t + dt
