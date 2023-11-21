@@ -1,105 +1,81 @@
 # Projeto 3
-<!-- Compilar com: pandoc ./relatorio-3-13836963.mkdn --pdf-engine=lualatex -f markdown-implicit_figures -o ./relatorio-3-13836963.pdf -->
+<!-- Compilar com: pandoc ./relatorio-4-13836963.mkdn --pdf-engine=lualatex -f markdown-implicit_figures -o ./relatorio-4-13836963.pdf -->
 
 
 ## Tarefa A
 O código abaixo calcula o problema do pêndulo pelo método de Euler, no entanto - como pede o enunciado - está errado.
 
 ````fortran
-      program a
-      implicit real*8 (a-h, o-z)
-      dimension h(14)
-      dext1 = 9.796782013838d0 ! Derivada exata
-      dext2 = 64.098324549472d0 ! Segunda derivada exata
-      dext3 = 671.514613457866d0 ! Terceira derivada exata
-      h(1) = 0.5d0
-      h(2) = 0.2d0
-      h(3) = 0.1d0
-      h(4) = 0.05d0
-      h(5) = 0.01d0
-      h(6) = 0.005d0
-      h(7) = 0.001d0
-      h(8) = 0.0005d0
-      h(9) = 0.0001d0
-      h(10) = 0.00005d0
-      h(11) = 0.00001d0
-      h(12) = 0.000001d0
-      h(13) = 0.0000001d0
-      h(14) = 0.00000001d0
-      
-      open(file='saida-1',unit=2)
-      write(2,*) 'h                   | dsim3              | dfr2   ',
-     & '            | dtr2               | dsim5              | ',
-     & 'd2sim5             | d3ansim5           |'
-      do i = 1,14
-        c0 = h(i)
-        c1 = dext1 - dsim3(h(i))
-        c2 = dext1 - dfr2(h(i))
-        c3 = dext1 - dtr2(h(i))
-        c4 = dext1- dsim5(h(i))
-        c5 = dext2 - d2sim5(h(i))
-        c6 = dext3 - d3ansim5(h(i))
-        
-        write(2,4) c0, c1, c2, c3, c4, c5, c6
-4       format( 7('|', f20.10), '|')
-      end do
-              
-      write(2,70) dext1, dext1, dext1, dext1, dext2, dext3
-70    format('| EXATO              ', 6('|', f20.10), '|')
-      end program
-      
-      real*8 function fn(an,h)
-        implicit real*8 (a-h, o-z)
-        fn = f((0.5d0)+(an*h))
-      end function
-      
-      real*8 function f(x)
-        implicit real*8 (a-h, o-z)
-        f = dexp(x/2.0d0)*dtan(2.0d0*x)
-      end function
-      
-      real*8 function dsim3(h)
-        implicit real*8 (a-h, o-z)
-        dsim3 = ((fn(1.0d0,h) - fn(-1.0d0,h))/(2.0d0*h)) 
-      end function
-      
-      real*8 function dfr2(h)
-        implicit real*8 (a-h, o-z)
-        dfr2 = ((fn(1.0d0,h)-fn(0.0d0,h))/h)
-      end function
-      
-      real*8 function dtr2(h)
-        implicit real*8 (a-h, o-z)
-        dtr2 = ((fn(0.0d0,h)-fn(-1.0d0,h))/h)
-      end function
-      
-      real*8 function dsim5(h)
-        implicit real*8 (a-h, o-z)
-        dsim5 = ( (fn(-2.0d0,h)- (8.0d0*fn(-1.0d0,h)) + 
-     &  (8.0d0*fn(1.0d0,h))  - fn(2.0d0,h) )/(12*h) )
-      end function
-      
-      real*8 function d2sim5(h)
-        implicit real*8 (a-h, o-z)
-        d2sim5num = ((0.0d0 - fn(-2.0d0,h)) + (16.0d0*fn(-1.0d0,h)) 
-     &   - (30.0d0*fn(0.0d0,h)) + (16.0d0*fn(1.0d0,h)) - fn(2.0d0,h))
-        d2sim5 = ( d2sim5num/(12.0d0*(h**2.0d0)) )
-      end function
-      
-      real*8 function d3ansim5(h)
-        implicit real*8 (a-h, o-z)
-        d3ansim5num = ((0.0d0-fn(-2.0d0,h)) + (2.0d0*fn(-1.0d0,h)) - 
-     &  (2.0d0*fn(1.0d0,h)) +  fn(2.0d0,h))
-        d3ansim5 = ( d3ansim5num/(2.0d0*(h**3.0d0)) )
-      end function
+       implicit real*8 (a-h, o-z)
+       g = 9.8d0
+       al = 9.8d0
+       am = 1.0d0
+
+       tmax = 80.0d0
+       t = 0.0d0
+       dt = 0.01d0
+
+       pi = 4.0d0*datan(1.0d0)
+       omega = 0.0d0
+       theta = pi/6.0d0
+       
+
+       open(unit=7, file="theta")
+       open(unit=9, file="energia")
+
+       do while (t.lt.tmax)
+         t = t + dt
+         thetz = theta
+         theta = theta + (omega * dt)
+         omega = omega - ((g/al)*thetz*dt)
+         e =  al * am * ((((omega**2)*al)/2.0d0) + (g*(1-dcos(theta))))
+
+         write(9,*) t, e
+
+         if(abs(theta).ge.2.0d0*pi) then
+           write(7,*) t,mod(theta,2.0d0*pi)
+         else
+           write(7,*) t,theta
+         end if
+
+
+       end do
+
+       close(9)
+       close(7)
+       
+       end
+       
 ````
 
-A tabela gerada:
+Como podemos ver, o resultado do theta e da energia (respectivamente) não fazem sentido - a energia está aumentando:
 
-![tarefaA](fotos/Captura-de-tela_2023-10-23_21-02-26.png)
+![theta](fotos/thetaA.png)
 
-Assim, o melhor valor de h para as derivadas segunda e terceira parece ser 0.0005, pois é o que apresenta menor desvio em relação ao valor exato. Já para a derivada primeira, esse valor é 0.000001.
+![energia](fotos/energiaA.png)
 
+
+Para corrigir o problema, se deve fazer uma pequena alteração no código (abaixo representada por uma diff, por simplicidade):
+
+````diff
+15,16c15,16
+<        open(unit=7, file="theta")
+<        open(unit=9, file="energia")
+---
+>        open(unit=7, file="theta-certo")
+>        open(unit=9, file="energia-certo")
+20c20
+<          thetz = theta
+---
+>          
+22c22
+<          omega = omega - ((g/al)*thetz*dt)
+---
+>          omega = omega - ((g/al)*theta*dt)
+32d31
+< 
+
+````
 
 ## Tarefa B
 O código abaixo aproxima a integral $\int_0^1exp(-x)cos(2\pi x)dx$ por diversos métodos e imprime a diferença entre o valor calculado e o valor exato.

@@ -1,0 +1,16 @@
+15,16c15,16
+<        open(unit=7, file="theta")
+<        open(unit=9, file="energia")
+---
+>        open(unit=7, file="theta-certo")
+>        open(unit=9, file="energia-certo")
+20c20
+<          thetz = theta
+---
+>          
+22c22
+<          omega = omega - ((g/al)*thetz*dt)
+---
+>          omega = omega - ((g/al)*theta*dt)
+32d31
+< 
