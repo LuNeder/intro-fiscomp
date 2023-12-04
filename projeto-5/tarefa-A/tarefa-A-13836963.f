@@ -2,7 +2,7 @@
        common x, y, xant, yant, GMs
        pi = 4.0d0 * datan(1.0d0)
        GMs = 4.0d0 * (pi**2.0d0)
-       dt = 0.001d0
+       dt = 0.00001d0
        tf = 1.0d0
        t = 0.0d0
        v0x = 2.0d0 * pi
