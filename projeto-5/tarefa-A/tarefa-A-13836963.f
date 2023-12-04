@@ -37,6 +37,6 @@
        end do
 
 C      excentricidade
-       write(*,*) sqrt((xmax**2.0d0)-(ymax**2.0d0))/xmax
+       write(*,*) sqrt(abs((xmax**2.0d0)-(ymax**2.0d0)))/xmax
 
        end
