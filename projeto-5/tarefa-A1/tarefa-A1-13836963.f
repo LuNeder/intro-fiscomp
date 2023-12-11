@@ -11,6 +11,7 @@ C      v0x = 2.0d0 * pi Vai ser 2.0d0 * pi / dsqrt(pos0plans(i)) p/ circular
        open(file='posicao', unit=7)
        xant = 0.0d0
        dv = 0.1d0
+       dv = 0.1d0
 
        pos0plans(1) = 0.39d0
        pos0plans(2) = 0.72d0
