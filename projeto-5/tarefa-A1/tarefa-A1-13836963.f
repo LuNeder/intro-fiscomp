@@ -27,11 +27,13 @@ C      yant = 1.0d0
 
 
       do i = 1,2
-         yant = pos0plans(i)
+         yant0 = pos0plans(i)
+         yant = yant0
          v0x = 2.0d0 * pi
          vte = 2.0d0 * pi / dsqrt(pos0plans(i))
+         
          ess = 10.0d0
-         do while (ess.gt.(8*10.0d0**(-3)))
+         do while (ess.gt.(8.0d0*10.0d0**(-3.0d0)))
            y = yant + (v0y*dt)
            x = xant + (v0x*dt)
            ymax = 0.0d0
@@ -58,6 +60,8 @@ C             write(*,*) xmax, ymax, t
              t = t + dt
              
            end do
+           yant = yant0
+           xant = 0.0d0
            write(*,*) 'aqui'
 C          excentricidade
            if (ymax.gt.xmax) then
